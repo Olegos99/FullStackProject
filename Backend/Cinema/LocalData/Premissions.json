@@ -1,0 +1,13 @@
+[
+    {
+        "id": "61f63e8de4c909954be639fb",
+        "Premissions": [{
+            "View Subscriptions": true,
+            "Create Subscriptions": true,
+            "Delete Subscriptions": true,
+            "View Movies":true,
+            "Create Movies":true,
+            "Delete Movies":true
+        }]
+    }
+]
