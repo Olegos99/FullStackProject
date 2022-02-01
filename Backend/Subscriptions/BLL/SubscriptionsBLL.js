@@ -15,7 +15,20 @@ const GetAllSubscriptions = () => {
         });
     });
 }
-//Get All Items
+
+const GetSubscriptionById = (id) => {
+    return new Promise ((resolve,reject) =>
+    {
+        SubscriptionModel.find({_id : id}, (error, items) =>
+        {
+            if(error)
+             reject(error)
+            else 
+            resolve(items)
+        });
+    });
+}
+
 
 //Post Item (Add new Item)
 const PostNewSubscription = (RecivedItem) =>
@@ -61,71 +74,10 @@ const DeleteSubscriptionByID = async (id) => {
 }
 
 
-
-
-
-
-// //GetItemByID
-// const GetItemById = (id) =>
-// {
-//     return new Promise ((resolve,reject) =>
-//     {
-//         ItemModel.findById(id,(error, item) =>
-//         {
-//             if(error)
-//             reject(error);
-//             else
-//             resolve(item);
-//         });
-//     });
-// }
-
-// //Post Item (Add new Item)
-// const PostNewItem = (RecivedItem) =>
-// {
-//     return new Promise((resolve,reject) =>
-//     {
-//         const NewItem = new ItemModel(RecivedItem);
-//         NewItem.save((error) => 
-//         {
-//             if(error)
-//             reject(error)
-//             else
-//             resolve(`${NewItem} item was succsesfuly saved`);
-//         });
-//     });
-// }
-
-// //Put Item by ID (Update existing)
-// const UpdateItemById = (id, item) =>
-// {
-//     return new Promise((resolve,reject) =>
-//     {
-//         ItemModel.findByIdAndUpdate(id, item,(error) => 
-//         {
-//             if(error)
-//             reject(error)
-//             else
-//             resolve(`Item with id ${id} was succsesfuly updated`);
-//         });
-//     });
-// }
-
-// //Delete Item by ID
-// const DeleteItemByID = async (id) => {
-//     return new Promise((resolve, reject) => {
-//         ItemModel.findByIdAndDelete(id, (err) => {
-//             if(err)
-//             reject(err);
-//             else
-//             resolve(`Item with id:${id} was delited`);
-//         })
-//     })
-// }
-
 module.exports ={
 PostNewSubscription,
 GetAllSubscriptions,
 UpdateSubscriptionById,
-DeleteSubscriptionByID
+DeleteSubscriptionByID,
+GetSubscriptionById
 }

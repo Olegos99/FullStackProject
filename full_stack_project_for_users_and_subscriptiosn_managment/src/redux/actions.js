@@ -1,15 +1,16 @@
-const SetUser = (userID, premissions) => {
+const SetUser = (userID, premissions,PersonalInfo) => {
     return {
         type: 'SetCurrentUser',
         payload: userID,
-        payloadPremissions: premissions
+        payloadPremissions: premissions,
+        payloadPersonalInfo: PersonalInfo
     }
 }
 
-const deleteUser = () => {
+const LogOut = () => {
     return {
-        type: 'delete',
+        type: 'LogOut',
     }
 }
 
-export { SetUser, deleteUser }
+export { SetUser, LogOut }

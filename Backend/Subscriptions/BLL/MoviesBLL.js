@@ -16,6 +16,20 @@ const GetAllMovies = () => {
     });
 }
 
+//Get movie by id
+const GetMovieById = (id) => {
+    return new Promise ((resolve,reject) =>
+    {
+        MovieModel.find({_id : id}, (error, items) =>
+        {
+            if(error)
+             reject(error)
+            else 
+            resolve(items)
+        });
+    });
+}
+
 
 //Post Item (Add new Item)
 const PostNewMovie = (RecivedItem) =>
@@ -66,4 +80,5 @@ GetAllMovies,
 PostNewMovie,
 UpdateMovieById,
 DeleteMovieByID,
+GetMovieById
 }

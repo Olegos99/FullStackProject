@@ -17,6 +17,21 @@ const GetAllMembers = () => {
     });
 }
 
+const GetMemberById = (id) => {
+    return new Promise ((resolve,reject) =>
+    {
+        MemberModel.find({_id : id}, (error, items) =>
+        {
+            if(error)
+             reject(error)
+            else 
+            resolve(items)
+        });
+    });
+}
+
+
+
 //Post Item (Add new Item)
 const PostNewMember = (RecivedItem) =>
 {
@@ -65,5 +80,6 @@ module.exports ={
 GetAllMembers,
 PostNewMember,
 UpdateMemberById,
-DeleteMemberByID
+DeleteMemberByID,
+GetMemberById
 }

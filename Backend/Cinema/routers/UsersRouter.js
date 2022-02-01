@@ -25,17 +25,26 @@ Router.get('/:username/:password',async (req,res) => {
     }
 });
 
-//check user by username and password
-Router.get('/:id',async (req,res) => {
+//check user existance
+Router.get('/username:username',async (req,res) => {
     try {
-        const Items = await UsersBLL.GetUsersPremissions(req.params.id);
+        const Items = await UsersBLL.CheckNewUserExistance(req.params.username);
         res.send(Items);
     } catch (error) {
         res.send(error);
     }
 });
 
-//Post new Member
+//get user premissions and other info by id
+Router.get('/:id',async (req,res) => {
+    try {
+        const Items = await UsersBLL.GetUserInfo(req.params.id);
+        res.send(Items);
+    } catch (error) {
+        res.send(error);
+    }
+});
+
 Router.post('/', async (req, res) => 
 {
     try {
@@ -47,7 +56,7 @@ Router.post('/', async (req, res) =>
     }
 });
 
-// Update an existing Movie
+
 Router.put('/:id', async (req, res) => {
     try {
         const response = await UsersBLL.UpdateUserById(req.params.id, req.body);
@@ -57,7 +66,6 @@ Router.put('/:id', async (req, res) => {
     }
 })
 
-// Delete an existing Movie
 Router.delete('/:id', async (req, res) => {
     try {
         const response = await UsersBLL.DeleteUserByID(req.params.id)

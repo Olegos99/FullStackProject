@@ -2,8 +2,13 @@ import React, { useState, useRef} from 'react';
 import {CheckUserLogIn, GetUserPremisssions} from '../Utils/Utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { SetUser } from '../redux/actions'
+import { Link, useHistory } from "react-router-dom";
+
+
 
 function LogInComponent() {
+    let history = useHistory();
+
     const [Username, setUsername] = useState([]);
     const [Password, setPassword] = useState([]);
 
@@ -36,14 +41,24 @@ function LogInComponent() {
         if(responce.data != "no such combination found")
         {
             console.log("Loged In!!!");
-            var premissions = await GetUserPremisssions(UsersUrl, responce.data);
-            console.log(premissions.data[0].Premissions[0]);
-            dispatch(SetUser(responce.data, premissions.data[0].Premissions[0]));
+            var ResivedData = await GetUserPremisssions(UsersUrl, responce.data);
+            console.log(ResivedData);
+            var premissions = ResivedData.data[0][0].Premissions;
+            console.log(premissions);//premisions
+            var PersonalInfo = ResivedData.data[1][0];
+            console.log(PersonalInfo);//otherdata
+            dispatch(SetUser(PersonalInfo.id, premissions, PersonalInfo));
+            history.push('/MainPage');
         }
         else{
-            console.log("Wrong username or password");
+            alert("Wrong username or password")
+            // console.log("Wrong username or password");
         }
     }
+
+    // const GoToCreateAccount = () => {
+    //     history.push('/CreateNewAccount');
+    // }
 
   return <div>
       <h2>Welcomme!</h2>
@@ -54,8 +69,9 @@ function LogInComponent() {
               <tr><td>Password:</td><td><input name="password" ref={PasswordinputEl} type="password" onChange={ApplyChanges}></input></td></tr>
           </tbody>
       </table><br/>
-      <button onClick={TryToLogIn}>Log in</button>
-
+      <button onClick={TryToLogIn}>Log in</button><br />
+      {/* New user? : <a onClick={GoToCreateAccount}>Create Account</a> */}
+        New User? : <Link to='/CreateNewAccount'>Create New Account</Link>
   </div>;
 }
 

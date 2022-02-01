@@ -15,6 +15,16 @@ Router.get('/',async (req,res) => {
     }
 });
 
+//get member by id
+Router.get('/:id',async (req,res) => {
+    try {
+        const Items = await MembersBLL.GetMemberById(req.params.id);
+        res.send(Items);
+    } catch (error) {
+        res.send(error);
+    }
+});
+
 //Post new Member
 Router.post('/', async (req, res) => 
 {

@@ -14,6 +14,17 @@ Router.get('/',async (req,res) => {
     }
 });
 
+Router.get('/:id',async (req,res) => {
+    try {
+        const Items = await SubscriptionBLL.GetSubscriptionById(req.params.id);
+        res.send(Items);
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+
+
 //Post new Movie
 Router.post('/', async (req, res) => 
 {

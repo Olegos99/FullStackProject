@@ -1,15 +1,20 @@
 const initialState = {
     CurrentUserID: 0,
-    CurrentUserPremissions: []
+    CurrentUserPremissions: [],
+    personalData:[]
 }
 
 const applyStoreChanges = (state = initialState, action) => {
     switch (action.type) {
         case "SetCurrentUser":
-            return { CurrentUserID: action.payload, CurrentUserPremissions : action.payloadPremissions}
+            return {
+                CurrentUserID: action.payload,
+                CurrentUserPremissions : action.payloadPremissions,
+                personalData : action.payloadPersonalInfo
+            }
 
-        case "delete": {
-            return { CurrentUserID: 0, CurrentUserPremissions:[]}
+        case "LogOut": {
+            return { CurrentUserID: 0, CurrentUserPremissions:[],personalData:[] }
         }
 
         default:

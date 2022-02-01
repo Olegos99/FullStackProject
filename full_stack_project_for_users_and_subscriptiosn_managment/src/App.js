@@ -1,12 +1,14 @@
 import './App.css';
-import FirstDataUploadingComponent from './MyComponents/FirstDataUploadingComponent'
-import LogInComponent from './MyComponents/LogInComponent';
+import FirstDataUploadingComponent from './InitialDataControll/FirstDataUploadingComponent'
+import MainRouter from './MyComponents/MainRouter';
+import TopNavBar from './MyComponents/TopNavBar';
 
 function App() {
   return (
     <div className="App">
       {/* <FirstDataUploadingComponent></FirstDataUploadingComponent> */}
-      <LogInComponent></LogInComponent>
+      <TopNavBar></TopNavBar>
+      <MainRouter></MainRouter>
     </div>
   );
 }

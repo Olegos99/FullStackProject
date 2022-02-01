@@ -3,7 +3,7 @@ const pathToUserModel = '../DBmodel/User.js';
 const UserModel = require(pathToUserModel);
 
 const PremissionsDAL = require('../DAL/PremissionsDAL');
-
+const UsersDAL = require('../DAL/UsersDAL');
 
 const GetAllUsers = () => {
     return new Promise ((resolve,reject) =>
@@ -34,16 +34,40 @@ const CheckUserByUsernameAndPassword = (username, password) => {
     });
 }
 
-const GetUsersPremissions = (id) =>
+const CheckNewUserExistance = (username) => {
+    return new Promise ((resolve,reject) =>
+    {
+        UserModel.find({ UserName:username, Password: ""}, (error, items) =>
+        {
+            if(items.length > 0)
+            {
+                resolve(items[0])
+            }
+            else{
+                reject("no such new user found")
+            }
+        });
+    });
+}
+
+const GetUserInfo = (id) =>
 {
     return new Promise (async(resolve,reject) =>
     {
+        var AllRequestedData = [];
+
         let json = await PremissionsDAL.getPremissionsJSON();
+        let json2 = await UsersDAL.getUsersJSON();
 
         var premissions = json.filter((obj) => obj.id == id);
+        var otherInfo = json2.filter((obj) => obj.id == id);
+
+        AllRequestedData.push(premissions);
+        AllRequestedData.push(otherInfo);
+
         if(premissions != null || premissions != undefined )
         {
-            resolve(premissions);
+            resolve(AllRequestedData);
         }
         else{
             reject("no such user");
@@ -51,6 +75,8 @@ const GetUsersPremissions = (id) =>
 
     });
 }
+
+//set users info
 
 
 //Post Item (Add new Item)
@@ -79,7 +105,7 @@ const UpdateUserById = (id, item) =>
             if(error)
             reject(error)
             else
-            resolve(`Movie with id ${id} was succsesfuly updated`);
+            resolve(`User with id ${id} was succsesfuly updated`);
         });
     });
 }
@@ -102,5 +128,6 @@ module.exports ={
     UpdateUserById,
     DeleteUserByID,
     CheckUserByUsernameAndPassword,
-    GetUsersPremissions
+    GetUserInfo,
+    CheckNewUserExistance
     }
