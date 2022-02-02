@@ -1,13 +1,25 @@
-import React, { useState, useRef} from 'react';
+import React, { useState, useRef, useEffect} from 'react';
 import {CheckUserLogIn, GetUserPremisssions} from '../Utils/Utils'
 import { useDispatch, useSelector } from 'react-redux'
+import { LogOut } from '../redux/actions'
 import { SetUser } from '../redux/actions'
 import { Link, useHistory } from "react-router-dom";
 
-
-
 function LogInComponent() {
     let history = useHistory();
+    const dispatch = useDispatch();
+    const store = useSelector((state) => state)
+
+    const DoLogOut = () => {
+        dispatch(LogOut());
+    }
+
+    useEffect(() => {
+        if(store.CurrentUserID !== 0)
+        {
+            DoLogOut();
+        }
+      }, []);
 
     const [Username, setUsername] = useState([]);
     const [Password, setPassword] = useState([]);
@@ -16,10 +28,6 @@ function LogInComponent() {
 
     const UsernameinputEl = useRef(null);
     const PasswordinputEl = useRef(null);
-
-    const dispatch = useDispatch();
-    const CurrentUserID = useSelector(state => state.CurrentUserID)
-
 
     const ApplyChanges = (e) =>
     {
@@ -34,26 +42,39 @@ function LogInComponent() {
         }
     }
 
+    const cleanUp = () =>
+    {
+        setUsername('');
+        setPassword('');
+    }
+
     const TryToLogIn = async () =>
     {
-        const responce = await CheckUserLogIn(UsersUrl,Username, Password);
-        console.log(responce);
-        if(responce.data != "no such combination found")
+        if(Username.length >= 1 && Password.length >= 1)
         {
-            console.log("Loged In!!!");
-            var ResivedData = await GetUserPremisssions(UsersUrl, responce.data);
-            console.log(ResivedData);
-            var premissions = ResivedData.data[0][0].Premissions;
-            console.log(premissions);//premisions
-            var PersonalInfo = ResivedData.data[1][0];
-            console.log(PersonalInfo);//otherdata
-            dispatch(SetUser(PersonalInfo.id, premissions, PersonalInfo));
-            history.push('/MainPage');
+            const responce = await CheckUserLogIn(UsersUrl,Username, Password);
+            console.log(responce);
+            if(responce.data != "no such combination found")
+            {
+                console.log("Loged In!!!");
+                var ResivedData = await GetUserPremisssions(UsersUrl, responce.data);
+                console.log(ResivedData);
+                var premissions = ResivedData.data[0][0].Premissions;
+                console.log(premissions);//premisions
+                var PersonalInfo = ResivedData.data[1][0];
+                console.log(PersonalInfo);//otherdata
+                dispatch(SetUser(PersonalInfo.id, premissions, PersonalInfo));
+                cleanUp();
+                history.push('/Blank');
+            }
+            else{
+                alert("Wrong username or password")
+            }
         }
         else{
-            alert("Wrong username or password")
-            // console.log("Wrong username or password");
+            alert("Please fill username and password fields to log in")
         }
+
     }
 
     // const GoToCreateAccount = () => {

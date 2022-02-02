@@ -3,6 +3,11 @@ import { Switch, Route } from 'react-router-dom'
 import LogInComponent from './LogInComponent';
 import CreateNewAccount from './CreateNewAccount';
 import MainPage from './MainPage';
+import SubscriptionsPage from './SubscriptionsPage';
+import UsersManagmentPage from './UsersManagmentPage';
+import BlankPage from './Blank';
+import EditUserPage from './EditUserPage';
+import AddUserPage from './AddUserPage';
 
 class MainRouter extends Component {
 
@@ -11,7 +16,12 @@ class MainRouter extends Component {
             <Switch>
                 <Route path='/' component = {LogInComponent} exact/>
                 <Route path='/CreateNewAccount' component = {CreateNewAccount}/>
-                <Route path='/MainPage' component = {MainPage}/>
+                <Route path='/Movies' component = {MainPage}/>
+                <Route path='/Subscriptions' component = {SubscriptionsPage}/>
+                <Route path='/UsersManagmentPage' component = {UsersManagmentPage}/>
+                <Route path='/Blank' component = {BlankPage}/>
+                <Route path='/AddUser' component = {AddUserPage}/>
+                <Route path='/EditUser/:id' component = {EditUserPage}/>
             </Switch>
 
         </div>;

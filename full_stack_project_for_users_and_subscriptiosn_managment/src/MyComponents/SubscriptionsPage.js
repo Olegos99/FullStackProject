@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import { useSelector } from 'react-redux'
 import { useHistory } from "react-router-dom";
 
-function MainPage() {
+function SubscriptionsPage() {
   const history = useHistory();
   const store = useSelector((state) => state)
 
@@ -14,8 +14,8 @@ function MainPage() {
   }, []);
 
   return <div>
-      <h2>Movies:</h2>
+      <h2>Subscriptions:</h2>
   </div>;
 }
 
-export default MainPage;
+export default SubscriptionsPage;

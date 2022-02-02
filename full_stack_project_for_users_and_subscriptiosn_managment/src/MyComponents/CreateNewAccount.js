@@ -28,20 +28,27 @@ function CreateNewAccount() {
 
     const CheckUserAndSave = async () =>
     {
-        const responce = await CheckUserExistence(UsersUrl,Username);
-        console.log(responce);
-        if(responce.data != "No such new user found")
+        if(Username.length >= 1)
         {
-            console.log("Found new user!");
-            var NewUser = responce.data;
-            NewUser.Password = Password;
-            console.log(NewUser);
-            const responce2 = await SaveNewUserPassword(UsersUrl,NewUser._id, NewUser);
-            console.log(responce2);
+            const responce = await CheckUserExistence(UsersUrl,Username);
+            console.log(responce);
+            if(responce.data != "no such new user found")
+            {
+                console.log("Found new user!");
+                var NewUser = responce.data;
+                NewUser.Password = Password;
+                console.log(NewUser);
+                const responce2 = await SaveNewUserPassword(UsersUrl,NewUser._id, NewUser);
+                console.log(responce2);
+            }
+            else{
+                alert("No such new user!")
+            }
         }
         else{
-            alert("No such new user!")
+            alert("Fill Username")
         }
+
     }
 
   return <div>
