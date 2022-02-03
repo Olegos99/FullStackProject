@@ -77,20 +77,75 @@ const GetUserInfo = (id) =>
 }
 
 //set users info
+const SetUserInfo = (id, userInfo) =>
+{
+    return new Promise (async(resolve,reject) =>
+    {
+        let Premissionsjson = await PremissionsDAL.getPremissionsJSON();
+        let Usersjson = await UsersDAL.getUsersJSON();
+
+        var counter = 0;
+        Premissionsjson.forEach(element => {
+            if(element.id === id)
+            {
+                element = userInfo[1];
+                counter ++;
+            }
+        });
+
+        if(counter === 0) // not found such user => create it
+        {
+            var newPremission =     {
+                id: `${id}`,
+                Premissions: userInfo[1]
+            }
+            Premissionsjson.push(newPremission);
+        }
+
+        counter = 0;
+
+        Usersjson.forEach(element => {
+            if(element.id === id)
+            {
+                element = userInfo[2][0];
+                counter ++;
+            }
+        });
+
+        if(counter === 0) // not found such user => create it
+        {
+            var newPersonalInfo = userInfo[2][0];
+            newPersonalInfo.id = id;
+            Usersjson.push(newPersonalInfo);
+        }
+
+        var premissions = await PremissionsDAL.setPremissionsJSON(Premissionsjson);
+        var users = await UsersDAL.setUsersJSON(Usersjson);
+
+        if(premissions != null || premissions != undefined && users != null || users != undefined)
+        {
+            resolve("Json's sucssesfully updated");
+        }
+        else{
+            reject("Was error on writing files to jsons");
+        }
+
+    });
+}
 
 
 //Post Item (Add new Item)
 const PostNewUser = (RecivedItem) =>
 {
-    return new Promise((resolve,reject) =>
+    return new Promise(async(resolve,reject) =>
     {
-        const NewUser = new UserModel(RecivedItem);
+        const NewUser = new UserModel(RecivedItem[0][0]);
         NewUser.save((error) => 
         {
             if(error)
             reject(error)
             else
-            resolve(`${NewUser} item was succsesfuly saved`);
+            resolve(NewUser);
         });
     });
 }
@@ -129,5 +184,6 @@ module.exports ={
     DeleteUserByID,
     CheckUserByUsernameAndPassword,
     GetUserInfo,
-    CheckNewUserExistance
+    CheckNewUserExistance,
+    SetUserInfo
     }

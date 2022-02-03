@@ -23,7 +23,6 @@ class MainRouter extends Component {
                 <Route path='/AddUser' component = {AddUserPage}/>
                 <Route path='/EditUser/:id' component = {EditUserPage}/>
             </Switch>
-
         </div>;
     }
 }

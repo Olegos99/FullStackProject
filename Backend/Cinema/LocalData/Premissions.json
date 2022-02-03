@@ -1,13 +1,15 @@
 [
-    {
-        "id": "61f63e8de4c909954be639fb",
-        "Premissions": [
-            {"name":"View Subscriptions", "value": true},
-            {"name":"Create Subscriptions", "value": true},
-            {"name":"Delete Subscriptions", "value": true},
-            {"name":"View Movies", "value":true},
-            {"name":"Create Movies", "value":true},
-            {"name":"Delete Movies", "value":true}
-        ]
-    }
+  {
+    "id": "61f63e8de4c909954be639fb",
+    "Premissions": [
+      { "name": "View Subscriptions", "value": true },
+      { "name": "Create Subscriptions", "value": true },
+      { "name": "Update Subscriptions", "value": true },
+      { "name": "Delete Subscriptions", "value": true },
+      { "name": "View Movies", "value": true },
+      { "name": "Create Movies", "value": true },
+      { "name": "Update Movies", "value": true },
+      { "name": "Delete Movies", "value": true }
+    ]
+  }
 ]

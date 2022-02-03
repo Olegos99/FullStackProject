@@ -45,12 +45,24 @@ Router.get('/:id',async (req,res) => {
     }
 });
 
+
 Router.post('/', async (req, res) => 
 {
     try {
         const Item = req.body;  
         const result = await UsersBLL.PostNewUser(Item);
-        res.send(result);
+        const result2 = await UsersBLL.SetUserInfo(result.id, Item);
+        res.send(result2);
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+
+Router.put('/newpassword:id',async (req,res) => {
+    try {
+        const Item = await UsersBLL.UpdateUserById(req.params.id);
+        res.send(Item);
     } catch (error) {
         res.send(error);
     }
@@ -59,8 +71,10 @@ Router.post('/', async (req, res) =>
 
 Router.put('/:id', async (req, res) => {
     try {
-        const response = await UsersBLL.UpdateUserById(req.params.id, req.body);
-        res.send(response);
+        const Item = req.body;  
+        const response = await UsersBLL.UpdateUserById(req.params.id, Item);
+        const response2 = await UsersBLL.SetUserInfo(req.params.id, Item);
+        res.send(response2);
     } catch (error) {
         res.send(error)
     }

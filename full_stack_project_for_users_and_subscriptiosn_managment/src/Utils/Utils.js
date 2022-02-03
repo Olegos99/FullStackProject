@@ -6,11 +6,11 @@ const CheckUserLogIn = (url, username, password) => Axios.get(`${url}/${username
 
 const CheckUserExistence = (url, username) => Axios.get(`${url}/username${username}`);
 
-const SaveNewUserPassword = (url, id, obj) => Axios.put(`${url}/${id}`, obj);
+const SaveNewUserPassword = (url, id, obj) => Axios.put(`${url}/newpassword${id}`, obj);
 
-const GetUserPremisssions = (url,id)  => Axios.get(`${url}/${id}`);
+const GetUserPremisssions = (url,id) => Axios.get(`${url}/${id}`);
 
-const getById = (url, id) => Axios.get(`${url}/${id}`);
+const getById = (url,id) => Axios.get(`${url}/${id}`);
 
 const addObj = (url, obj) => Axios.post(url, obj);
 
