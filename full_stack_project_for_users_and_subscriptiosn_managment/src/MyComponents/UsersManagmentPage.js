@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { Switch, Route } from 'react-router-dom';
 import AddUserPage from './AddUserPage';
 import AllUsersPage from './AllUsersPage';
+import EditUserPage from './EditUserPage';
 
 function UsersManagmentPage() {
   const history = useHistory();
@@ -37,6 +38,7 @@ function UsersManagmentPage() {
             <Switch>
                 <Route path='/UsersManagmentPage/' component = {AllUsersPage} exact/>
                 <Route path='/UsersManagmentPage/addUser' component = {AddUserPage}/>
+                <Route path='/UsersManagmentPage/EditUser/:id' component = {EditUserPage}/>
             </Switch>
   </div>;
 }

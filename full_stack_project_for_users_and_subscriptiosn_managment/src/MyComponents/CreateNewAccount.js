@@ -31,18 +31,20 @@ function CreateNewAccount() {
         if(Username.length >= 1)
         {
             const responce = await CheckUserExistence(UsersUrl,Username);
-            console.log(responce);
+            // console.log(responce);
             if(responce.data != "no such new user found")
             {
                 console.log("Found new user!");
                 var NewUser = responce.data;
                 NewUser.Password = Password;
                 console.log(NewUser);
+                console.log(NewUser._id);
                 const responce2 = await SaveNewUserPassword(UsersUrl,NewUser._id, NewUser);
                 console.log(responce2);
+                history.push('/');
             }
             else{
-                alert("No such new user!")
+                alert("No such NEW user!")
             }
         }
         else{

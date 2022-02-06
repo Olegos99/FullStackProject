@@ -36,10 +36,31 @@ Router.get('/username:username',async (req,res) => {
 });
 
 //get user premissions and other info by id
-Router.get('/:id',async (req,res) => {
+Router.get('/UserInfo:id',async (req,res) => {
     try {
+        console.log("GetUserInfoRequestResived");
         const Items = await UsersBLL.GetUserInfo(req.params.id);
         res.send(Items);
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+Router.get('/GetUsername:id',async (req,res) => {
+    try {
+        console.log("GetUserNameRequestResived");
+        const Item = await UsersBLL.GetUserNameById(req.params.id);
+        res.send(Item);
+    } catch (error) {
+        res.send(error);
+    }
+});
+
+Router.get('/GetUserPremissions:id',async (req,res) => {
+    try {
+        console.log("GetUserPremissionsRequestResived");
+        const Item = await UsersBLL.GetUserInfo(req.params.id);
+        res.send(Item);
     } catch (error) {
         res.send(error);
     }
@@ -61,7 +82,8 @@ Router.post('/', async (req, res) =>
 
 Router.put('/newpassword:id',async (req,res) => {
     try {
-        const Item = await UsersBLL.UpdateUserById(req.params.id);
+        console.log("Set New Password Request Recived");
+        const Item = await UsersBLL.UpdateUserPasswordById(req.params.id, req.body);
         res.send(Item);
     } catch (error) {
         res.send(error);
@@ -71,6 +93,7 @@ Router.put('/newpassword:id',async (req,res) => {
 
 Router.put('/:id', async (req, res) => {
     try {
+        console.log("Update (put) Request Recived");
         const Item = req.body;  
         const response = await UsersBLL.UpdateUserById(req.params.id, Item);
         const response2 = await UsersBLL.SetUserInfo(req.params.id, Item);

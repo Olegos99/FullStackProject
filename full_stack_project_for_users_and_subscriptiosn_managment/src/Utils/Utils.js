@@ -6,16 +6,22 @@ const CheckUserLogIn = (url, username, password) => Axios.get(`${url}/${username
 
 const CheckUserExistence = (url, username) => Axios.get(`${url}/username${username}`);
 
-const SaveNewUserPassword = (url, id, obj) => Axios.put(`${url}/newpassword${id}`, obj);
-
-const GetUserPremisssions = (url,id) => Axios.get(`${url}/${id}`);
-
 const getById = (url,id) => Axios.get(`${url}/${id}`);
+
+const getUserInfoById = (url,id) => Axios.get(`${url}/UserInfo${id}`);
+
+const GetUserNameById = (url, id) => Axios.get(`${url}/GetUsername${id}`); 
+
+const GetUserPremisssions = (url,id) => Axios.get(`${url}/GetUserPremissions${id}`);
 
 const addObj = (url, obj) => Axios.post(url, obj);
 
 const updateObj = (url, id, obj) => Axios.put(`${url}/${id}`, obj);
 
+const SaveNewUserPassword = (url, id, obj) => Axios.put(`${url}/newpassword${id}`, obj);
+
 const deleteObj = (url, id) => Axios.delete(`${url}/${id}`);
 
-export { getAll, getById, addObj, updateObj, deleteObj, CheckUserLogIn, GetUserPremisssions, CheckUserExistence, SaveNewUserPassword};
+
+
+export { getUserInfoById, getAll, getById, addObj, updateObj, deleteObj, CheckUserLogIn, GetUserPremisssions, CheckUserExistence, SaveNewUserPassword, GetUserNameById};

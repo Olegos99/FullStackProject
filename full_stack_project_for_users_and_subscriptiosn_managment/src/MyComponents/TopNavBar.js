@@ -80,13 +80,23 @@ function TopNavBar() {
 
     const ManageUsers = () =>
     {
-        history.push('/UsersManagmentPage');
+        history.push('/UsersManagmentPage/');
     }
 
     let GetPremmisionByPremName = (premissionName) =>
     {
-        var premmision = store.CurrentUserPremissions.filter((obj) => obj.name === `${premissionName}`);
-        return (premmision[0].value);
+        var haveThisPremission = false;
+        var objectToCompare ={
+            [premissionName]: true
+        }
+        store.CurrentUserPremissions.forEach(element => {
+            if(JSON.stringify(element) === JSON.stringify(objectToCompare))
+            {
+                haveThisPremission = true;
+            }
+        });
+        // var premmision = store.CurrentUserPremissions.filter((obj) => obj.name === `${premissionName}`);
+        return (haveThisPremission);
     }
 
   return <div>
@@ -97,9 +107,9 @@ function TopNavBar() {
       </nav>
       <h1>Movies - Subscriptions Web Site</h1>
       <nav style={{ display: 'flex', justifyContent: 'left'}}>
-        <button name="movies" onClick={ShowMovies} style={{display: store.CurrentUserID !== 0 && GetPremmisionByPremName('View Movies')
+        <button name="movies" onClick={ShowMovies} style={{display: store.CurrentUserID !== 0 && GetPremmisionByPremName('View_Movies')
         ? "block" : "none"}}>Movies</button>
-        <button name="subscriptions" onClick={ShowSubscriptions} style={{display: store.CurrentUserID !== 0 && GetPremmisionByPremName('View Subscriptions')
+        <button name="subscriptions" onClick={ShowSubscriptions} style={{display: store.CurrentUserID !== 0 && GetPremmisionByPremName('View_Subscriptions')
         ? "block" : "none"}}>Subscriptions</button>
         <button name="Users Managment" onClick={ManageUsers} style={{display: store.CurrentUserID === '61f63e8de4c909954be639fb'
         ? "block" : "none"}}>Users Managment</button>

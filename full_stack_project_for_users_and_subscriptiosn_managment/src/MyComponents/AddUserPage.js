@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import {addObj} from '../Utils/Utils';
 
@@ -13,22 +13,37 @@ function AddUserPage() {
     UserName:"",
     SessionTimeOut:0,
     premissions:[
-      {name:"View Subscriptions", value: false},
-      {name:"Create Subscriptions", value: false},
-      {name:"Update Subscriptions", value: false},
-      {name:"Delete Subscriptions", value: false},
-      {name:"View Movies", value:false},
-      {name:"Create Movies", value:false},
-      {name:"Update Movies", value:false},
-      {name:"Delete Movies", value:false}
+      {View_Subscriptions: false},
+      {Create_Subscriptions: false},
+      {Update_Subscriptions: false},
+      {Delete_Subscriptions: false},
+      {View_Movies:false},
+      {Create_Movies:false},
+      {Update_Movies:false},
+      {Delete_Movies:false}
     ]
   });
+
+  const ViewSubs = useRef(null);
+  const ViewMovies = useRef(null);
+
 
   const validateFormAndSubmit = async(event) => {
     event.preventDefault();
     // all checks     
-    let Fname = document.forms["myForm"]["FirstName"].value;
-    if (Fname == "") {
+    if (document.forms["myForm"]["FirstName"].value == "") {
+      alert("First Name must be filled out");
+      return false;
+    }
+    if (document.forms["myForm"]["LastName"].value == "") {
+      alert("Last Name must be filled out");
+      return false;
+    }
+    if (document.forms["myForm"]["UserName"].value == "") {
+      alert("User Name must be filled out");
+      return false;
+    }
+    if (document.forms["myForm"]["FirstName"].value == "") {
       alert("First Name must be filled out");
       return false;
     }
@@ -58,14 +73,66 @@ function AddUserPage() {
   {
     var UpdatedUser = {...User};
       var fieldName = e.target.name;
-      if(fieldName == "FirstName")
-      UpdatedUser.FirstName = e.target.value;
-      if(fieldName == "LastName")
-      UpdatedUser.LastName = e.target.value;
-      if(fieldName == "UserName")
-      UpdatedUser.UserName = e.target.value;
-      if(fieldName == "SessionTimeOut")
-      UpdatedUser.SessionTimeOut = e.target.value;
+      console.log(fieldName);
+      if(fieldName == "FirstName" || fieldName == "LastName" || fieldName == "UserName" || fieldName == "SessionTimeOut")
+      {
+        UpdatedUser =  {
+          ...UpdatedUser,
+          [fieldName]:e.target.value
+        }
+      }
+
+      if(fieldName === "View_Subscriptions" || fieldName === "Create_Subscriptions" || fieldName === "Update_Subscriptions" || fieldName === "Delete_Subscriptions" ||
+      fieldName === "View_Movies" ||fieldName === "Create_Movies" ||fieldName === "Update_Movies" ||fieldName === "Delete_Movies")
+      {
+        var PremissionToCompare = {
+          [fieldName]: true
+        }
+        var PremissionToCompare2 = {
+          [fieldName]: false
+        }
+        
+        var PremissionIndex = -1;
+
+        PremissionIndex = UpdatedUser.premissions.findIndex((prem) => JSON.stringify(prem) === JSON.stringify(PremissionToCompare2)||
+        JSON.stringify(prem) === JSON.stringify(PremissionToCompare));
+
+        console.log(PremissionIndex);
+
+        UpdatedUser.premissions[PremissionIndex] = {
+          [fieldName]: e.target.checked
+        }
+
+        if( fieldName === "Create_Subscriptions" || fieldName === "Update_Subscriptions" || fieldName === "Delete_Subscriptions" ||
+        fieldName === "Create_Movies" ||fieldName === "Update_Movies" ||fieldName === "Delete_Movies")
+        {
+            if(fieldName === "Create_Subscriptions" || fieldName === "Update_Subscriptions" || fieldName === "Delete_Subscriptions")
+            {
+              var ViewSubsPremissionIndex = 0;
+              var ObjToCompare = {
+                View_Subscriptions: true
+              }
+              if(JSON.stringify(UpdatedUser.premissions[ViewSubsPremissionIndex]) !== JSON.stringify(ObjToCompare) )
+              {
+                UpdatedUser.premissions[ViewSubsPremissionIndex] = ObjToCompare;
+                ViewSubs.current.checked = true;                //activate in front
+              }
+            }
+            if(fieldName === "Create_Movies" ||fieldName === "Update_Movies" ||fieldName === "Delete_Movies")
+            {
+              var ViewMoviesPremissionIndex = 4;
+              var ObjToCompare = {
+                View_Movies: true
+              }
+              if(JSON.stringify(UpdatedUser.premissions[ViewMoviesPremissionIndex]) !== JSON.stringify(ObjToCompare) )
+              {
+                UpdatedUser.premissions[ViewMoviesPremissionIndex] = ObjToCompare;
+                ViewMovies.current.checked = true;//activate in front
+              }
+            }
+        }
+
+      }
       SetUser(UpdatedUser);
   }
 
@@ -78,14 +145,14 @@ function AddUserPage() {
       Session TimeOut (Minutes): <input type="number" name="SessionTimeOut" min = "0"onChange={HandleInputChange}/> <br/>
       Premissions: <br/>
       <ul>
-        <li><input type="checkbox" name="ViewSub"></input> View Subscriptions </li>
-        <li><input type="checkbox" name="CreateSub"></input> Create Subscriptions </li>
-        <li><input type="checkbox" name="UpdateSub"></input> Update Subscriptions </li>
-        <li><input type="checkbox" name="DeleteSub"></input> Delete Subscriptions </li>
-        <li><input type="checkbox" name="ViewMov"></input> View Movies </li>
-        <li><input type="checkbox" name="CreateMov"></input> Create Movies </li>
-        <li><input type="checkbox" name="UpdateMov"></input> Update Movies </li>
-        <li><input type="checkbox" name="DeleteMov"></input> Delete Movies </li>
+        <li><input ref={ViewSubs} type="checkbox" name="View_Subscriptions" onChange={HandleInputChange}></input> View Subscriptions </li>
+        <li><input type="checkbox" name="Create_Subscriptions" onChange={HandleInputChange}></input> Create Subscriptions </li>
+        <li><input type="checkbox" name="Update_Subscriptions" onChange={HandleInputChange}></input> Update Subscriptions </li>
+        <li><input type="checkbox" name="Delete_Subscriptions" onChange={HandleInputChange}></input> Delete Subscriptions </li>
+        <li><input ref={ViewMovies} type="checkbox" name="View_Movies" onChange={HandleInputChange}></input> View Movies </li>
+        <li><input type="checkbox" name="Create_Movies" onChange={HandleInputChange}></input> Create Movies </li>
+        <li><input type="checkbox" name="Update_Movies" onChange={HandleInputChange}></input> Update Movies </li>
+        <li><input type="checkbox" name="Delete_Movies" onChange={HandleInputChange}></input> Delete Movies </li>
       </ul> 
       <input type="submit" value="Submit"/>
       <Link to='/UsersManagmentPage/'>Back</Link>
@@ -94,3 +161,4 @@ function AddUserPage() {
 }
 
 export default AddUserPage;
+

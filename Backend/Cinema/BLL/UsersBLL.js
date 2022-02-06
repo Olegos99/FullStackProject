@@ -18,6 +18,22 @@ const GetAllUsers = () => {
     });
 }
 
+const GetUserNameById = (id) => {
+    return new Promise ((resolve,reject) =>
+    {
+        UserModel.findById(id, (error, item) =>
+        {
+            if(item)
+            {
+                resolve(item)
+            }
+            else{
+                reject("user with this ID not found")
+            }
+        });
+    });
+}
+
 const CheckUserByUsernameAndPassword = (username, password) => {
     return new Promise ((resolve,reject) =>
     {
@@ -79,23 +95,28 @@ const GetUserInfo = (id) =>
 //set users info
 const SetUserInfo = (id, userInfo) =>
 {
+    console.log("Set user info get: " + id);
     return new Promise (async(resolve,reject) =>
     {
         let Premissionsjson = await PremissionsDAL.getPremissionsJSON();
         let Usersjson = await UsersDAL.getUsersJSON();
 
         var counter = 0;
-        Premissionsjson.forEach(element => {
+
+        Premissionsjson.forEach((element) => {
             if(element.id === id)
             {
-                element = userInfo[1];
+                // console.log(element);
+                element.Premissions = userInfo[1];
                 counter ++;
+                // console.log(element);
             }
         });
 
         if(counter === 0) // not found such user => create it
         {
-            var newPremission =     {
+            console.log("CreateNewUserPremissions");
+            var newPremission ={
                 id: `${id}`,
                 Premissions: userInfo[1]
             }
@@ -107,13 +128,20 @@ const SetUserInfo = (id, userInfo) =>
         Usersjson.forEach(element => {
             if(element.id === id)
             {
-                element = userInfo[2][0];
+                // console.log(element);
+                element.FirstName = userInfo[2][0].FirstName;
+                element.LastName = userInfo[2][0].LastName;
+                element.CreatedDate = userInfo[2][0].CreatedDate;
+                element.SessionTimeOut = userInfo[2][0].SessionTimeOut;
+                element.id = id;
                 counter ++;
+                // console.log(element);
             }
         });
 
         if(counter === 0) // not found such user => create it
         {
+            console.log("CreateNewUserPersonalInfo");
             var newPersonalInfo = userInfo[2][0];
             newPersonalInfo.id = id;
             Usersjson.push(newPersonalInfo);
@@ -155,6 +183,20 @@ const UpdateUserById = (id, item) =>
 {
     return new Promise((resolve,reject) =>
     {
+        UserModel.findByIdAndUpdate(id, item[0][0],(error) => 
+        {
+            if(error)
+            reject(error)
+            else
+            resolve(`User with id ${id} was succsesfuly updated`);
+        });
+    });
+}
+
+const UpdateUserPasswordById = (id, item) =>
+{
+    return new Promise((resolve,reject) =>
+    {
         UserModel.findByIdAndUpdate(id, item,(error) => 
         {
             if(error)
@@ -167,12 +209,21 @@ const UpdateUserById = (id, item) =>
 
 //Delete Item by ID
 const DeleteUserByID = async (id) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async(resolve, reject) => {
+        let Premissionsjson = await PremissionsDAL.getPremissionsJSON();
+        let Usersjson = await UsersDAL.getUsersJSON();
+    
+        await Premissionsjson.splice(Premissionsjson.findIndex((obj) => obj.id === id), 1); 
+        await Usersjson.splice(Usersjson.findIndex((obj) => obj.id === id), 1); 
+
+        var premissions = await PremissionsDAL.setPremissionsJSON(Premissionsjson);
+        var users = await UsersDAL.setUsersJSON(Usersjson);
+
         UserModel.findByIdAndDelete(id, (err) => {
             if(err)
             reject(err);
             else
-            resolve(`Item with id:${id} was delited`);
+            resolve(`Item with id:${id} was delited sucssesfuly`);
         })
     })
 }
@@ -185,5 +236,7 @@ module.exports ={
     CheckUserByUsernameAndPassword,
     GetUserInfo,
     CheckNewUserExistance,
-    SetUserInfo
+    SetUserInfo,
+    GetUserNameById,
+    UpdateUserPasswordById
     }

@@ -8,7 +8,7 @@ const getPremissionsJSON = () => {
                 console.log("DAL failed");
             } else {
                 resolve(data)
-                console.log("DAL worked");
+                // console.log("DAL worked");
             }
         })
     })
@@ -22,7 +22,7 @@ const setPremissionsJSON = (obj) => {
                 console.log("DAL failed Json NOT updated");
             } else {
                 resolve(obj)
-                console.log("Json updated sucssesfuly!!!");
+                // console.log("Json updated sucssesfuly!!!");
             }
         })
     })

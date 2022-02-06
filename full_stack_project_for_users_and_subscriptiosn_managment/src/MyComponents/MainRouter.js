@@ -18,7 +18,7 @@ class MainRouter extends Component {
                 <Route path='/CreateNewAccount' component = {CreateNewAccount}/>
                 <Route path='/Movies' component = {MainPage}/>
                 <Route path='/Subscriptions' component = {SubscriptionsPage}/>
-                <Route path='/UsersManagmentPage' component = {UsersManagmentPage}/>
+                <Route path='/UsersManagmentPage/' component = {UsersManagmentPage}/>
                 <Route path='/Blank' component = {BlankPage}/>
                 <Route path='/AddUser' component = {AddUserPage}/>
                 <Route path='/EditUser/:id' component = {EditUserPage}/>
