@@ -3,22 +3,41 @@ import {CheckUserLogIn, GetUserPremisssions} from '../Utils/Utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { LogOut } from '../redux/actions'
 import { SetUser } from '../redux/actions'
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
 function LogInComponent() {
-    let history = useHistory();
+    const history = useHistory();
     const dispatch = useDispatch();
-    const store = useSelector((state) => state)
+    const store = useSelector((state) => state);
+    const location = useLocation();
 
     const DoLogOut = () => {
         dispatch(LogOut());
     }
 
     useEffect(() => {
-        if(store.CurrentUserID !== 0)
+        const lastPage = window.localStorage.getItem("LastPage");
+        const LastUserId = window.localStorage.getItem('ID');
+        if(window.localStorage.getItem('LastPage') !== location.pathname)
         {
-            DoLogOut();
+            if(window.localStorage.getItem('ID') != "" && window.localStorage.getItem('ID') != undefined) //page was refreshed
+            {
+                var Id = JSON.parse(window.localStorage.getItem('ID'));
+                var premissions = JSON.parse(window.localStorage.getItem('premissions'));
+                var PersonalInfo = JSON.parse(window.localStorage.getItem('PersonalInfo'));
+                dispatch(SetUser(Id, premissions, PersonalInfo));
+                setTimeout(() => {
+                    history.push(lastPage);
+                },500)
+            }
+            else{
+                window.localStorage.setItem("LastPage", location.pathname);
+            }
         }
+        // if(store.CurrentUserID !== 0)
+        // {
+        //     DoLogOut();
+        // }
       }, []);
 
     const [Username, setUsername] = useState([]);
@@ -64,6 +83,9 @@ function LogInComponent() {
                 var PersonalInfo = ResivedData.data[1][0];
                 console.log(PersonalInfo);//otherdata
                 dispatch(SetUser(PersonalInfo.id, premissions, PersonalInfo));
+                window.localStorage.setItem('ID', JSON.stringify(PersonalInfo.id));
+                window.localStorage.setItem('premissions', JSON.stringify(premissions));
+                window.localStorage.setItem('PersonalInfo', JSON.stringify(PersonalInfo));
                 cleanUp();
                 history.push('/Blank');
             }

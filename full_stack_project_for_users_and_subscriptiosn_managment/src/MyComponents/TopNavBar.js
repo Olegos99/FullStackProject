@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import { useSelector, useDispatch } from 'react-redux'
 import { LogOut } from '../redux/actions'
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 function TopNavBar() {
     const dispatch = useDispatch();
@@ -18,6 +18,9 @@ function TopNavBar() {
     
     const DoLogOut = () => {
         dispatch(LogOut());
+        window.localStorage.setItem('ID', "");
+        window.localStorage.setItem('premissions', "");
+        window.localStorage.setItem('PersonalInfo', "");
         history.push('/');
     }
 

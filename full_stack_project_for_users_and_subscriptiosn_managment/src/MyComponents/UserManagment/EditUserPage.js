@@ -1,10 +1,13 @@
 import React, {useState, useRef, useEffect} from 'react';
-import { Link, useHistory, useRouteMatch } from 'react-router-dom';
-import {updateObj, getUserInfoById, GetUserNameById} from '../Utils/Utils';
+import { Link, useHistory, useRouteMatch, useLocation } from 'react-router-dom';
+import {updateObj, getUserInfoById, GetUserNameById} from '../../Utils/Utils';
+import { useSelector } from 'react-redux'
 
 function EditUserPage(props) {
   const history = useHistory();
   const match = useRouteMatch();
+  const location = useLocation();
+  const store = useSelector((state) => state);
 
   const UsersUrl = "http://localhost:8500/api/users";
 
@@ -22,12 +25,23 @@ function EditUserPage(props) {
   const UserTimout = useRef(null);
 
     let userIdToEdit = match.params.id;
-    let PW = '';
+    // let PW = '';
 
     useEffect(() => {
      console.log("User id to edit = " + userIdToEdit); // <-- pass the component props
+     if (store.CurrentUserID === 0 || store.CurrentUserID !== "61f63e8de4c909954be639fb")
+     {
+       // if no current loged in user or someone who is not admin tryes to go there
+       history.push("/"); // go to log in page
+     }
+     if(window.localStorage.getItem('LastPage') !== location.pathname)
+     {
+       window.localStorage.setItem('LastPage', location.pathname);
+     }
      FillUserInfo();
     },[])
+
+    const [PW, SetPW] = useState("")
 
   const [User, SetUser] = useState({
     FirstName: "",
@@ -52,7 +66,8 @@ function EditUserPage(props) {
       var Username = await GetUserNameById(UsersUrl, userIdToEdit); // username
       console.log(allInfo.data);
       console.log(Username.data);
-      PW = Username.data.Password;
+      SetPW(Username.data.Password)
+      // PW = Username.data.Password;
       console.log("PW = " + PW);
 
       UserFirstName.current.value = allInfo.data[1][0].FirstName;
@@ -71,10 +86,7 @@ function EditUserPage(props) {
 
 
       var UpdatedUser = {...User};
-      // UpdatedUser.FirstName = allInfo.data[1][0].FirstName;
-      // UpdatedUser.LastName = allInfo.data[1][0].LastName;
-      // UpdatedUser.UserName = Username.data.UserName;
-      // UpdatedUser.SessionTimeOut = allInfo.data[1][0].SessionTimeOut;
+
       UpdatedUser.FirstName = UserFirstName.current.value;
       UpdatedUser.LastName = UserLastName.current.value;
       UpdatedUser.UserName = UserName.current.value;
@@ -99,9 +111,6 @@ function EditUserPage(props) {
     ReturnString = String;
     return ReturnString;
   }
-
-
-
 
   const validateFormAndSubmit = async(event) => {
     event.preventDefault();
@@ -181,35 +190,38 @@ function EditUserPage(props) {
           [fieldName]: e.target.checked
         }
 
-        if( fieldName === "Create_Subscriptions" || fieldName === "Update_Subscriptions" || fieldName === "Delete_Subscriptions" ||
-        fieldName === "Create_Movies" ||fieldName === "Update_Movies" ||fieldName === "Delete_Movies")
+        if(e.target.checked)
         {
-            if(fieldName === "Create_Subscriptions" || fieldName === "Update_Subscriptions" || fieldName === "Delete_Subscriptions")
-            {
-              var ViewSubsPremissionIndex = 0;
-              var ObjToCompare = {
-                View_Subscriptions: true
-              }
-              if(JSON.stringify(UpdatedUser.premissions[ViewSubsPremissionIndex]) !== JSON.stringify(ObjToCompare) )
+          if( fieldName === "Create_Subscriptions" || fieldName === "Update_Subscriptions" || fieldName === "Delete_Subscriptions" ||
+          fieldName === "Create_Movies" ||fieldName === "Update_Movies" ||fieldName === "Delete_Movies")
+          {
+  
+              if(fieldName === "Create_Subscriptions" || fieldName === "Update_Subscriptions" || fieldName === "Delete_Subscriptions")
               {
-                UpdatedUser.premissions[ViewSubsPremissionIndex] = ObjToCompare;
-                ViewSubs.current.checked = true; //activate in front
+                var ViewSubsPremissionIndex = 0;
+                var ObjToCompare = {
+                  View_Subscriptions: true
+                }
+                if(JSON.stringify(UpdatedUser.premissions[ViewSubsPremissionIndex]) !== JSON.stringify(ObjToCompare) )
+                {
+                  UpdatedUser.premissions[ViewSubsPremissionIndex] = ObjToCompare;
+                  ViewSubs.current.checked = true; //activate in front
+                }
               }
-            }
-            if(fieldName === "Create_Movies" ||fieldName === "Update_Movies" || fieldName === "Delete_Movies")
-            {
-              var ViewMoviesPremissionIndex = 4;
-              var ObjToCompare = {
-                View_Movies: true
-              }
-              if(JSON.stringify(UpdatedUser.premissions[ViewMoviesPremissionIndex]) !== JSON.stringify(ObjToCompare) )
+              if(fieldName === "Create_Movies" ||fieldName === "Update_Movies" || fieldName === "Delete_Movies")
               {
-                UpdatedUser.premissions[ViewMoviesPremissionIndex] = ObjToCompare;
-                ViewMovies.current.checked = true;//activate in front
+                var ViewMoviesPremissionIndex = 4;
+                var ObjToCompare = {
+                  View_Movies: true
+                }
+                if(JSON.stringify(UpdatedUser.premissions[ViewMoviesPremissionIndex]) !== JSON.stringify(ObjToCompare) )
+                {
+                  UpdatedUser.premissions[ViewMoviesPremissionIndex] = ObjToCompare;
+                  ViewMovies.current.checked = true;//activate in front  
+                }
               }
-            }
+          }
         }
-
       }
       SetUser(UpdatedUser);
   }

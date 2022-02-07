@@ -50,14 +50,23 @@ const PostNewMovie = (RecivedItem) =>
 //Put Item by ID (Update existing)
 const UpdateMovieById = (id, item) =>
 {
+    console.log("Update Movie Request Recived");
+    console.log(id);
+    console.log(item);
     return new Promise((resolve,reject) =>
     {
         MovieModel.findByIdAndUpdate(id, item,(error) => 
         {
             if(error)
-            reject(error)
+            {
+                reject(error)
+                console.log("eror happend");
+            }
             else
-            resolve(`Movie with id ${id} was succsesfuly updated`);
+            {
+                resolve(`Movie with id ${id} was succsesfuly updated`);
+            }
+
         });
     });
 }

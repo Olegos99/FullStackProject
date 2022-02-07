@@ -1,11 +1,26 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import {addObj} from '../Utils/Utils';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import {addObj} from '../../Utils/Utils';
+import { useSelector } from 'react-redux'
 
 function AddUserPage() {
   const history = useHistory();
+  const location = useLocation();
+  const store = useSelector((state) => state);
 
   const UsersUrl = "http://localhost:8500/api/users";
+
+  useEffect(() => {
+    if (store.CurrentUserID === 0 || store.CurrentUserID !== "61f63e8de4c909954be639fb")
+    {
+      // if no current loged in user or someone who is not admin tryes to go there
+      history.push("/"); // go to log in page
+    }
+    if(window.localStorage.getItem('LastPage') !== location.pathname)
+    {
+      window.localStorage.setItem('LastPage', location.pathname);
+    }
+  },[]);
 
   const [User, SetUser] = useState({
     FirstName: "",
@@ -26,7 +41,6 @@ function AddUserPage() {
 
   const ViewSubs = useRef(null);
   const ViewMovies = useRef(null);
-
 
   const validateFormAndSubmit = async(event) => {
     event.preventDefault();
@@ -103,21 +117,24 @@ function AddUserPage() {
           [fieldName]: e.target.checked
         }
 
-        if( fieldName === "Create_Subscriptions" || fieldName === "Update_Subscriptions" || fieldName === "Delete_Subscriptions" ||
-        fieldName === "Create_Movies" ||fieldName === "Update_Movies" ||fieldName === "Delete_Movies")
+        if(e.target.checked)
         {
+          if( fieldName === "Create_Subscriptions" || fieldName === "Update_Subscriptions" || fieldName === "Delete_Subscriptions" ||
+          fieldName === "Create_Movies" ||fieldName === "Update_Movies" ||fieldName === "Delete_Movies")
+          {
             if(fieldName === "Create_Subscriptions" || fieldName === "Update_Subscriptions" || fieldName === "Delete_Subscriptions")
             {
-              var ViewSubsPremissionIndex = 0;
-              var ObjToCompare = {
-                View_Subscriptions: true
-              }
-              if(JSON.stringify(UpdatedUser.premissions[ViewSubsPremissionIndex]) !== JSON.stringify(ObjToCompare) )
-              {
-                UpdatedUser.premissions[ViewSubsPremissionIndex] = ObjToCompare;
-                ViewSubs.current.checked = true;                //activate in front
-              }
+                var ViewSubsPremissionIndex = 0;
+                var ObjToCompare = {
+                  View_Subscriptions: true
+                }
+                if(JSON.stringify(UpdatedUser.premissions[ViewSubsPremissionIndex]) !== JSON.stringify(ObjToCompare) )
+                {
+                  UpdatedUser.premissions[ViewSubsPremissionIndex] = ObjToCompare;
+                  ViewSubs.current.checked = true;                //activate in front
+                }
             }
+              
             if(fieldName === "Create_Movies" ||fieldName === "Update_Movies" ||fieldName === "Delete_Movies")
             {
               var ViewMoviesPremissionIndex = 4;
@@ -130,8 +147,8 @@ function AddUserPage() {
                 ViewMovies.current.checked = true;//activate in front
               }
             }
+          }
         }
-
       }
       SetUser(UpdatedUser);
   }

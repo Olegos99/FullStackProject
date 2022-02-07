@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom'
 import LogInComponent from './LogInComponent';
 import CreateNewAccount from './CreateNewAccount';
-import MainPage from './MainPage';
+import MoviesPage from './Movies/MoviesManagmentPage';
 import SubscriptionsPage from './SubscriptionsPage';
-import UsersManagmentPage from './UsersManagmentPage';
+import UsersManagmentPage from './UserManagment/UsersManagmentPage';
 import BlankPage from './Blank';
-import EditUserPage from './EditUserPage';
-import AddUserPage from './AddUserPage';
 
 class MainRouter extends Component {
 
@@ -16,12 +14,10 @@ class MainRouter extends Component {
             <Switch>
                 <Route path='/' component = {LogInComponent} exact/>
                 <Route path='/CreateNewAccount' component = {CreateNewAccount}/>
-                <Route path='/Movies' component = {MainPage}/>
+                <Route path='/Movies/' component = {MoviesPage}/>
                 <Route path='/Subscriptions' component = {SubscriptionsPage}/>
                 <Route path='/UsersManagmentPage/' component = {UsersManagmentPage}/>
                 <Route path='/Blank' component = {BlankPage}/>
-                <Route path='/AddUser' component = {AddUserPage}/>
-                <Route path='/EditUser/:id' component = {EditUserPage}/>
             </Switch>
         </div>;
     }
