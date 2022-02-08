@@ -20,7 +20,7 @@ function LogInComponent() {
         const LastUserId = window.localStorage.getItem('ID');
         if(window.localStorage.getItem('LastPage') !== location.pathname)
         {
-            if(window.localStorage.getItem('ID') != "" && window.localStorage.getItem('ID') != undefined) //page was refreshed
+            if(window.localStorage.getItem('ID') !== "" && window.localStorage.getItem('ID') !== undefined) //page was refreshed
             {
                 var Id = JSON.parse(window.localStorage.getItem('ID'));
                 var premissions = JSON.parse(window.localStorage.getItem('premissions'));
@@ -31,7 +31,7 @@ function LogInComponent() {
                 },500)
             }
             else{
-                window.localStorage.setItem("LastPage", location.pathname);
+                //window.localStorage.setItem("LastPage", location.pathname);
             }
         }
         // if(store.CurrentUserID !== 0)

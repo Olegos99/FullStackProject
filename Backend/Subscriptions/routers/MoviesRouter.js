@@ -30,7 +30,10 @@ Router.post('/', async (req, res) =>
 {
     try {
         const Item = req.body;  
+        console.log("Create new movie request recived");
+        // console.log(Item);
         const result = await MoviesBLL.PostNewMovie(Item);
+        // console.log(result);
         res.send(result);
     } catch (error) {
         res.send(error);

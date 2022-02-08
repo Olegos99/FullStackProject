@@ -19,7 +19,7 @@ function MainPage() {
     }
     if(store.CurrentUserID === 0 || !GetPremmisionByPremName("View_Movies")) // if no current loged in user
     {
-      window.localStorage.setItem("LastPage", "/");
+      //window.localStorage.setItem("LastPage", "/");
       history.push('/'); // go to log in page
     }
   }, []);

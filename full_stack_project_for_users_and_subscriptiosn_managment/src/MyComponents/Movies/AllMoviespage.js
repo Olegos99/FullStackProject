@@ -12,11 +12,22 @@ function AllMoviespage() {
 
     const isMountedRef = useRef(null);
     const IsFetchedRef = useRef(null);
+    const SearchLineRef = useRef(null);
+
+    const [CurrentluSearching, SetCurrentluSearching] = useState(false);
 
     const [Movies, SetMovies] = useState([]);
     const [Subscriptions, SetSubscriptions] = useState([]);
 
     const [AllMoviesToRender, SetAllMoviesToRender] = useState([]);
+    const [AllMoviesToShow, SetAllMoviesToShow] = useState([]);
+
+    const referenceToCurrentluSearching = useRef();
+    const referenceToMoviesToRender = useRef();
+    const referenceToMoviesToShow = useRef();
+    referenceToMoviesToRender.current = AllMoviesToRender;
+    referenceToMoviesToShow.current = AllMoviesToShow;
+    referenceToCurrentluSearching.current = CurrentluSearching;
 
     useEffect(async() => {
         IsFetchedRef.current = true;
@@ -55,13 +66,33 @@ function AllMoviespage() {
         return GenresString;
     } 
 
+    const SearchAlgorithm = () =>
+    {
+        var SearchLineNode = SearchLineRef.current;
+        var SearchLine = SearchLineNode.value;
+        var SearchLineLength = SearchLine.length;
+        if(SearchLineLength == 0 || SearchLine == undefined)
+        {
+            SetCurrentluSearching(false);
+            SetAllMoviesToShow(AllMoviesToRender);
+            console.log("Set show movies DEFAULT value");
+        }
+        else{
+            SetCurrentluSearching(true);
+            // console.log("Searchline to lower = " + SearchLine.toLowerCase());
+            var newMoviesArray = AllMoviesToRender.filter((element) => element.props.name.toLowerCase().includes(SearchLine.toLowerCase()));
+            console.log("Set show movies to new value");
+            SetAllMoviesToShow(newMoviesArray);
+        }
+    }
+
     useEffect(() => {
         console.log("usefect2");
         isMountedRef.current = true;
         if(isMountedRef.current)
         {
             let Prep = Movies.map((item,key) => (
-                <table id={item.key} key={key} style={{ border: "thick solid black"}}>
+                <table name={item.Name} id={item._id} key={key} style={{ border: "thick solid black"}}>
                 <tbody>
                   <tr>
                     <th>
@@ -111,10 +142,12 @@ function AllMoviespage() {
               </table>
             ));
             SetAllMoviesToRender(Prep);
+            SetAllMoviesToShow(Prep);
         }
         return function cleanUp2()
         {
             SetAllMoviesToRender([]);
+            SetAllMoviesToShow([]);
             console.log("cleanUp2 was called");
         }
     }, [Movies]);
@@ -128,7 +161,28 @@ function AllMoviespage() {
         console.log("Delete movie with id: " + e.target.id);
         var responce = await deleteObj(MoviesUrl, e.target.id);
         console.log(responce);
+
         //refreshPage
+        var UpdatedFilmsToRender = referenceToMoviesToRender.current;
+        UpdatedFilmsToRender = UpdatedFilmsToRender.filter(function( obj ) {
+            return obj.props.id !== e.target.id;
+        });
+        SetAllMoviesToRender(UpdatedFilmsToRender);
+        if(referenceToCurrentluSearching.current)
+        {
+            console.log("updating curr searching list");
+            var UpdatetFilmsToShow = referenceToMoviesToShow.current;
+            var deletedFilmid = e.target.id;
+            UpdatetFilmsToShow = UpdatetFilmsToShow.filter(function( obj ) {
+                return obj.props.id !== deletedFilmid;
+            });
+            console.log(UpdatetFilmsToShow);
+            SetAllMoviesToShow(UpdatetFilmsToShow);
+        }
+        else{
+            SetAllMoviesToShow(UpdatedFilmsToRender);
+        }
+        
     }
 
 
@@ -150,7 +204,8 @@ function AllMoviespage() {
 
   return <div>
       <h2>All movies:</h2>
-      {AllMoviesToRender}
+      <div>Search: <input ref ={SearchLineRef} type="text" onChange={SearchAlgorithm}></input></div><br/>
+      {AllMoviesToShow}
   </div>;
 }
 

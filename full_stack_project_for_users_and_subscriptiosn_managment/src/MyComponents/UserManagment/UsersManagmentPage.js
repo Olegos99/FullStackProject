@@ -18,7 +18,7 @@ function UsersManagmentPage() {
     }
     if(store.CurrentUserID === 0 || store.CurrentUserID !== '61f63e8de4c909954be639fb') // if no current loged in user or someone who is not admin tryes to go there
     {
-      window.localStorage.setItem("LastPage", "/");
+      //window.localStorage.setItem("LastPage", "/");
       history.push('/'); // go to log in page
     }
   }, []);
