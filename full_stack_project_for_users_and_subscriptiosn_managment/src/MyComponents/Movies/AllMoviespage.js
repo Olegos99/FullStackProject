@@ -1,14 +1,16 @@
 import React, {useState, useEffect, useRef} from 'react';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import {getAll, deleteObj} from '../../Utils/Utils';
 import { useSelector } from "react-redux";
 
 function AllMoviespage() {
     const history = useHistory();
     const store = useSelector((state) => state);
+    const match = useRouteMatch();
     const location = useLocation();
     const MoviesUrl = "http://localhost:8500/api/movies";
     const SubsciptionsUrl = "http://localhost:8500/api/subscriptions";
+    const MembersUrl = "http://localhost:8500/api/members";
 
     const isMountedRef = useRef(null);
     const IsFetchedRef = useRef(null);
@@ -18,6 +20,7 @@ function AllMoviespage() {
 
     const [Movies, SetMovies] = useState([]);
     const [Subscriptions, SetSubscriptions] = useState([]);
+    const [Members, SetMembers] = useState([]);
 
     const [AllMoviesToRender, SetAllMoviesToRender] = useState([]);
     const [AllMoviesToShow, SetAllMoviesToShow] = useState([]);
@@ -25,15 +28,26 @@ function AllMoviespage() {
     const referenceToCurrentluSearching = useRef();
     const referenceToMoviesToRender = useRef();
     const referenceToMoviesToShow = useRef();
+    const referenceToSubscriptions = useRef();
     referenceToMoviesToRender.current = AllMoviesToRender;
     referenceToMoviesToShow.current = AllMoviesToShow;
     referenceToCurrentluSearching.current = CurrentluSearching;
+    referenceToSubscriptions.current = Subscriptions;
+
+    let OnlyMovieIdToShow = match.params.id;
 
     useEffect(async() => {
         IsFetchedRef.current = true;
 
+        console.log("only one movie to show = " + OnlyMovieIdToShow);
+
         if(IsFetchedRef.current)
         {
+
+            await getAll(MembersUrl).then((result) => {
+                SetMembers(result.data);
+            }).catch(ex => console.error(ex));
+
             await getAll(MoviesUrl).then((result) => {
                 SetMovies(result.data);
             }).catch(ex => console.error(ex));
@@ -43,13 +57,42 @@ function AllMoviespage() {
             }).catch(ex => console.error(ex));
         }
 
+        if(OnlyMovieIdToShow != undefined)
+        {
+            SetCurrentluSearching(true);
+        }
+
         return function cleanUp()
         {
-            console.log("cleanUp was called");
+            // console.log("cleanUp was called");
             SetMovies([]);
             SetSubscriptions([]);
+            SetMembers([]);
         }
     }, []);
+
+    useEffect(() =>
+    {
+        if(OnlyMovieIdToShow != undefined)
+        {
+            if(AllMoviesToShow.length == 0)
+            {
+                if(Movies.length > 0)
+                {
+                    console.log("Search for spesific movie");
+                    var SearchLineNode = SearchLineRef.current;
+                    SearchLineNode.value = Movies.filter(obj => obj._id == OnlyMovieIdToShow)[0].Name;
+                    SearchAlgorithm();
+                }
+            }
+            else
+            {
+                
+            }
+
+            // fill the search line and refresh
+        }
+    }, [CurrentluSearching]);
 
     const DoStringFronGenres = (genres) =>
     {
@@ -71,24 +114,28 @@ function AllMoviespage() {
         var SearchLineNode = SearchLineRef.current;
         var SearchLine = SearchLineNode.value;
         var SearchLineLength = SearchLine.length;
+        // console.log("Searching for: " + SearchLine);
         if(SearchLineLength == 0 || SearchLine == undefined)
         {
             SetCurrentluSearching(false);
             SetAllMoviesToShow(AllMoviesToRender);
-            console.log("Set show movies DEFAULT value");
+            // console.log("Set show movies DEFAULT value");
         }
         else{
             SetCurrentluSearching(true);
             // console.log("Searchline to lower = " + SearchLine.toLowerCase());
             var newMoviesArray = AllMoviesToRender.filter((element) => element.props.name.toLowerCase().includes(SearchLine.toLowerCase()));
-            console.log("Set show movies to new value");
+            // console.log("Set show movies to new value");
             SetAllMoviesToShow(newMoviesArray);
         }
     }
 
     useEffect(() => {
-        console.log("usefect2");
+        // console.log("usefect2");
         isMountedRef.current = true;
+
+        const SubscriptionsLength = Subscriptions.length;
+
         if(isMountedRef.current)
         {
             let Prep = Movies.map((item,key) => (
@@ -117,7 +164,26 @@ function AllMoviespage() {
                                 </tr>
                                 <tr>
                                     <td>
-                                       items
+                                       {
+                                       Subscriptions.map((obj) =>
+                                       {
+                                           return(
+                                        obj.Movies.map((movie, key) =>
+                                        {
+                                            // console.log(movie);
+                                            if(movie.movieId == item._id)
+                                            {
+                                                 return (<div key={key}><Link to="/Subscriptions/">{Members.filter(member => member._id === obj.MemberID)[0].Name}</Link>
+                                                 <span>, {movie.date.slice(0, -14)}</span>
+                                                 </div>)
+                                            }
+                                            else{
+                                                return null;
+                                            }
+                                        })
+                                           )}
+                                      )
+                                      }
                                     </td>
                                 </tr>
                             </tbody>
@@ -141,16 +207,21 @@ function AllMoviespage() {
                 </tbody>
               </table>
             ));
+
             SetAllMoviesToRender(Prep);
-            SetAllMoviesToShow(Prep);
+            // console.log(OnlyMovieIdToShow);
+            if(OnlyMovieIdToShow === undefined)
+            {            
+                SetAllMoviesToShow(Prep);
+            }
         }
         return function cleanUp2()
         {
             SetAllMoviesToRender([]);
             SetAllMoviesToShow([]);
-            console.log("cleanUp2 was called");
+            // console.log("cleanUp2 was called");
         }
-    }, [Movies]);
+    }, [Movies, Subscriptions]);
 
     const EditMovieWithId = (e) => {
         console.log("Edit movie with id: " + e.target.id);

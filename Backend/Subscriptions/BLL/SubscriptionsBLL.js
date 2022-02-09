@@ -19,7 +19,7 @@ const GetAllSubscriptions = () => {
 const GetSubscriptionById = (id) => {
     return new Promise ((resolve,reject) =>
     {
-        SubscriptionModel.find({_id : id}, (error, items) =>
+        SubscriptionModel.find({MemberID : id}, (error, items) =>
         {
             if(error)
              reject(error)
@@ -63,12 +63,18 @@ const UpdateSubscriptionById = (id, item) =>
 
 //Delete Item by ID
 const DeleteSubscriptionByID = async (id) => {
+    console.log("resived deletion request with id: " + id);
     return new Promise((resolve, reject) => {
-        SubscriptionModel.findByIdAndDelete(id, (err) => {
+        SubscriptionModel.deleteOne({MemberID : id}, (err) => {
             if(err)
-            reject(err);
+            {
+                reject(err);
+            }
             else
-            resolve(`Item with id:${id} was delited`);
+            {
+                resolve(`Item with id:${id} was delited`);
+            }
+
         })
     })
 }

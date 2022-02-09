@@ -58,6 +58,7 @@ function MainPage() {
       </nav>
       <Switch>
                 <Route path='/Movies/' component = {AllMoviespage} exact/>
+                <Route path='/Movies/spesificMovie/:id' component = {AllMoviespage} />
                 <Route path='/Movies/addMovie' component = {AddMoviePage}/>
                 <Route path='/Movies/EditMovie/:id' component = {EditMoviePage}/>
       </Switch>
