@@ -26,6 +26,7 @@ function LogInComponent() {
                 var premissions = JSON.parse(window.localStorage.getItem('premissions'));
                 var PersonalInfo = JSON.parse(window.localStorage.getItem('PersonalInfo'));
                 dispatch(SetUser(Id, premissions, PersonalInfo));
+
                 setTimeout(() => {
                     history.push(lastPage);
                 },500)

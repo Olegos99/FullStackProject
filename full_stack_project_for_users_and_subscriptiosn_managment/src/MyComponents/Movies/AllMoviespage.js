@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
-import {getAll, deleteObj} from '../../Utils/Utils';
+import {getAll, deleteObj, DeleteMovieFromAllSubscriptions} from '../../Utils/Utils';
 import { useSelector } from "react-redux";
 
 function AllMoviespage() {
@@ -37,6 +37,10 @@ function AllMoviespage() {
     let OnlyMovieIdToShow = match.params.id;
 
     useEffect(async() => {
+        if(window.localStorage.getItem('LastPage') !== location.pathname)
+        {
+          window.localStorage.setItem('LastPage', location.pathname);
+        }
         IsFetchedRef.current = true;
 
         console.log("only one movie to show = " + OnlyMovieIdToShow);
@@ -173,9 +177,18 @@ function AllMoviespage() {
                                             // console.log(movie);
                                             if(movie.movieId == item._id)
                                             {
-                                                 return (<div key={key}><Link to="/Subscriptions/">{Members.filter(member => member._id === obj.MemberID)[0].Name}</Link>
-                                                 <span>, {movie.date.slice(0, -14)}</span>
-                                                 </div>)
+                                                if(GetPremmisionByPremName("View_Subscriptions"))
+                                                {
+                                                    return (<div key={key}><Link to="/Subscriptions/">{Members.filter(member => member._id === obj.MemberID)[0].Name}</Link>
+                                                    <span>, {movie.date.slice(0, -14)}</span>
+                                                    </div>)
+                                                }
+                                                else{
+                                                    return (<div key={key}><span>{Members.filter(member => member._id === obj.MemberID)[0].Name}</span>
+                                                    <span>, {movie.date.slice(0, -14)}</span>
+                                                    </div>)
+                                                }
+
                                             }
                                             else{
                                                 return null;
@@ -232,6 +245,9 @@ function AllMoviespage() {
         console.log("Delete movie with id: " + e.target.id);
         var responce = await deleteObj(MoviesUrl, e.target.id);
         console.log(responce);
+        // delete movie from subscriptions!!!
+        var response2 = await DeleteMovieFromAllSubscriptions(SubsciptionsUrl,e.target.id);
+        console.log(response2);
 
         //refreshPage
         var UpdatedFilmsToRender = referenceToMoviesToRender.current;
@@ -253,7 +269,7 @@ function AllMoviespage() {
         else{
             SetAllMoviesToShow(UpdatedFilmsToRender);
         }
-        
+        //refreshPage     
     }
 
 

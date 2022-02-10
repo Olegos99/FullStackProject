@@ -40,17 +40,27 @@ Router.post('/', async (req, res) =>
 // Update an existing Movie
 Router.put('/:id', async (req, res) => {
     try {
-        const response = await SubscriptionBLL.UpdateSubscriptionById(req.params.id, req.body);
+        const response = await SubscriptionBLL.UpdateSubscriptionsById(req.params.id, req.body);
         res.send(response);
     } catch (error) {
         res.send(error)
     }
 })
 
-// Delete an existing Movie
-Router.delete('/:id', async (req, res) => {
+// Delete an existing Subscription
+Router.delete('/subscription:id', async (req, res) => {
     try {
         const response = await SubscriptionBLL.DeleteSubscriptionByID(req.params.id)
+        res.send(response)
+    } catch (error) {
+        res.send(error)
+    }
+})
+
+// Delete an existing Movie from all subscriptions
+Router.delete('/MovieID:id', async (req, res) => {
+    try {
+        const response = await SubscriptionBLL.UpdateSubscriptionsByDeletingFilmById(req.params.id)
         res.send(response)
     } catch (error) {
         res.send(error)

@@ -1,12 +1,13 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
-import {getAll, deleteObj, getById, updateObj, addObj} from '../../Utils/Utils';
+import {getAll, deleteObj, getById, updateObj, addObj, deleteSubscription} from '../../Utils/Utils';
 import { useSelector } from "react-redux";
 import SubscriptionPartOfMember from './SubscriptionPartOfMember';
 
 function AllMembers() {
   const history = useHistory();
   const store = useSelector((state) => state);
+  const location = useLocation();
 
   const MembersUrl = "http://localhost:8500/api/members";
   const SubsciptionsUrl = "http://localhost:8500/api/subscriptions";
@@ -47,6 +48,11 @@ function AllMembers() {
 
   useEffect(async() => {
 
+    if(window.localStorage.getItem('LastPage') !== location.pathname)
+    {
+      window.localStorage.setItem('LastPage', location.pathname);
+    }
+
     RequestAllRelevantData();
 
     return function cleanUp()
@@ -67,7 +73,7 @@ function AllMembers() {
     console.log("Delete Member with id: " + e.target.id);
     var responce = await deleteObj(MembersUrl, e.target.id);
     console.log(responce);
-    var responce = await deleteObj(SubsciptionsUrl, e.target.id);
+    var responce = await deleteSubscription(SubsciptionsUrl, e.target.id);
     console.log(responce);
     //refresh Somehow
     RequestAllRelevantData();
@@ -76,21 +82,28 @@ function AllMembers() {
   const GetMovieNameById = (id) =>
   {
     var MovieName = RefToFilms.current.filter((obj) => obj._id === id);
-    return (MovieName[0].Name);
+    if(MovieName[0] != undefined)
+    {
+      return (MovieName[0].Name);
+    }
+    else{
+      return (null);
+    }
   }
 
   useEffect(()=>{
     let SubscriptionsPrep = Subscriptions.map((item, key) =>(
      <ul key={key} id={item.MemberID}>
        {item.Movies.map((obj, key) =>{
+        //  console.log(obj)
           var NameToDisplay = GetMovieNameById(obj.movieId);
           // console.log(NameToDisplay);
          if(GetPremmisionByPremName("View_Movies"))
          {
-           return (<li key ={key}><Link to={`/Movies/spesificMovie/${obj.movieId}`} id={obj.movieId}>{NameToDisplay}</Link>, {obj.date.slice(0,-14)}</li>)
+           return (<li key ={key} id={obj.movieId}><Link to={`/Movies/spesificMovie/${obj.movieId}`}>{NameToDisplay}</Link>, {obj.date.slice(0,-14)}</li>)
          }
          else{
-          return (<li key ={key} id={obj.movieId}>{NameToDisplay}, {obj.date}</li>)
+          return (<li key ={key} id={obj.movieId}>{NameToDisplay}, {obj.date.slice(0,-14)}</li>)
          }
        })}
      </ul>
@@ -135,7 +148,7 @@ function AllMembers() {
                       <nav style={{ display: 'flex'}}>
                         {SubscriptionPartOfMember(item,OpenSubscriptionCreation,
                            ShowCreateNewSubscription.includes(item._id),[...films],
-                            [...AllSubscriptionsToRender], SubscribeToMovie)}
+                            [...AllSubscriptionsToRender], SubscribeToMovie, GetPremmisionByPremName("Update_Subscriptions"))}
                       </nav>    
                   </td>
                 </tr>

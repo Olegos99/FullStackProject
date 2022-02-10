@@ -11,11 +11,6 @@ function AddUserPage() {
   const UsersUrl = "http://localhost:8500/api/users";
 
   useEffect(() => {
-    if (store.CurrentUserID === 0 || store.CurrentUserID !== "61f63e8de4c909954be639fb")
-    {
-      // if no current loged in user or someone who is not admin tryes to go there
-      history.push("/"); // go to log in page
-    }
     if(window.localStorage.getItem('LastPage') !== location.pathname)
     {
       window.localStorage.setItem('LastPage', location.pathname);
@@ -159,7 +154,7 @@ function AddUserPage() {
       First Name: <input type="text" name="FirstName" onChange={HandleInputChange}/> <br/>
       Last Name: <input type="text" name="LastName"onChange={HandleInputChange}/> <br/>
       User Name: <input type="text" name="UserName"onChange={HandleInputChange}/> <br/>
-      Session TimeOut (Minutes): <input type="number" name="SessionTimeOut" min = "0"onChange={HandleInputChange}/> <br/>
+      Session TimeOut (Minutes): <input type="number" name="SessionTimeOut" min = "0" step="any" onChange={HandleInputChange}/> <br/>
       Premissions: <br/>
       <ul>
         <li><input ref={ViewSubs} type="checkbox" name="View_Subscriptions" onChange={HandleInputChange}></input> View Subscriptions </li>

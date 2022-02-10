@@ -22,6 +22,10 @@ const SaveNewUserPassword = (url, id, obj) => Axios.put(`${url}/newpassword${id}
 
 const deleteObj = (url, id) => Axios.delete(`${url}/${id}`);
 
+const DeleteMovieFromAllSubscriptions = (url,MovieId) => Axios.delete(`${url}/MovieID${MovieId}`);
+
+const deleteSubscription = (url, id) => Axios.delete(`${url}/subscription${id}`);
 
 
-export { getUserInfoById, getAll, getById, addObj, updateObj, deleteObj, CheckUserLogIn, GetUserPremisssions, CheckUserExistence, SaveNewUserPassword, GetUserNameById};
+
+export { deleteSubscription, DeleteMovieFromAllSubscriptions, getUserInfoById, getAll, getById, addObj, updateObj, deleteObj, CheckUserLogIn, GetUserPremisssions, CheckUserExistence, SaveNewUserPassword, GetUserNameById};

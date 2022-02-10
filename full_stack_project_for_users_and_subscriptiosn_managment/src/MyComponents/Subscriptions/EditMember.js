@@ -7,6 +7,7 @@ function EditMember() {
   const history = useHistory();
   const store = useSelector((state) => state);
   const match = useRouteMatch();
+  const location = useLocation();
 
   const MembersUrl = "http://localhost:8500/api/members";
 
@@ -25,6 +26,10 @@ function EditMember() {
 
     useEffect(() => {
       console.log("member id to edit = " + MemberIdToEdit); // <-- pass the component props
+      if(window.localStorage.getItem('LastPage') !== location.pathname)
+      {
+        window.localStorage.setItem('LastPage', location.pathname);
+      }
       FillMemberInfo();
   },[])
 

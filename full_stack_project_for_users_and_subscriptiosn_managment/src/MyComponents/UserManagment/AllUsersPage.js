@@ -18,11 +18,6 @@ function AllUsersPage() {
 
   useEffect(() => {
     console.log("useEffect1");
-    if (store.CurrentUserID === 0 || store.CurrentUserID !== "61f63e8de4c909954be639fb")
-    {
-      // if no current loged in user or someone who is not admin tryes to go there
-      history.push("/"); // go to log in page
-    }
     if(window.localStorage.getItem('LastPage') !== location.pathname)
     {
       window.localStorage.setItem('LastPage', location.pathname);

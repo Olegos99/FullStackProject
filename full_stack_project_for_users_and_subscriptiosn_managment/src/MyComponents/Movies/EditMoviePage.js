@@ -29,6 +29,10 @@ function EditMoviePage(props) {
 
         useEffect(() => {
             console.log("User id to edit = " + MovieIdToEdit); // <-- pass the component props
+            if(window.localStorage.getItem('LastPage') !== location.pathname)
+            {
+              window.localStorage.setItem('LastPage', location.pathname);
+            }
             FillMovieInfo();
         },[])
 
@@ -123,6 +127,7 @@ function EditMoviePage(props) {
             {
                 var RecivedString = Genres.current.value;
                 var WordsArray = RecivedString.split(' ');
+                WordsArray = WordsArray.filter(word => word != "");
                 WordsArray.forEach(element => {
                     element = element.replace(',','');
                 });

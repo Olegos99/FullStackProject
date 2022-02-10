@@ -6,6 +6,15 @@ import { useSelector } from 'react-redux'
 function AddMember() {
   const history = useHistory();
   const store = useSelector((state) => state);
+  const location = useLocation();
+
+  useEffect(()=>
+  {
+    if(window.localStorage.getItem('LastPage') !== location.pathname)
+    {
+      window.localStorage.setItem('LastPage', location.pathname);
+    }
+  },[]);
 
 
   const MembersUrl = "http://localhost:8500/api/members";

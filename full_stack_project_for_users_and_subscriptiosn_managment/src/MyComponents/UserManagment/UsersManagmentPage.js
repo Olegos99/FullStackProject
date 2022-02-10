@@ -12,14 +12,36 @@ function UsersManagmentPage() {
   const location = useLocation();
 
   useEffect(() => {
-    if(window.localStorage.getItem('LastPage') !== location.pathname)
+    // if(store.CurrentUserID === 0 || store.CurrentUserID !== '61f63e8de4c909954be639fb') // if no current loged in user or someone who is not admin tryes to go there
+    // {
+    //   console.log(window.localStorage.getItem('ID'))
+    //   console.log("61f63e8de4c909954be639fb")
+    //   if(JSON.parse(window.localStorage.getItem('ID')) == "61f63e8de4c909954be639fb") // but maybe store isnt updated
+    //   {
+    //     window.localStorage.setItem('LastPage', location.pathname);
+    //   }
+    //   else{
+    //     // window.localStorage.setItem("LastPage", "/");
+    //     history.push('/');
+    //   }
+    // }
+    // else{
+    //   if(window.localStorage.getItem('LastPage') !== location.pathname)
+    //   {
+    //     window.localStorage.setItem('LastPage', location.pathname);
+    //   }
+    // }
+    if(store.CurrentUserID === 0 || store.CurrentUserID !== '61f63e8de4c909954be639fb') // if no current loged in user
     {
-      window.localStorage.setItem('LastPage', location.pathname);
-    }
-    if(store.CurrentUserID === 0 || store.CurrentUserID !== '61f63e8de4c909954be639fb') // if no current loged in user or someone who is not admin tryes to go there
-    {
-      //window.localStorage.setItem("LastPage", "/");
+      // window.localStorage.setItem('LastPage', "/");
       history.push('/'); // go to log in page
+    }
+    else
+    {
+      if(window.localStorage.getItem('LastPage') !== location.pathname)
+      {
+        window.localStorage.setItem('LastPage', location.pathname);
+      }
     }
   }, []);
 

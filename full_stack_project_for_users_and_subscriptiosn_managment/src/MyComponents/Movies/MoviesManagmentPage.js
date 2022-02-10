@@ -12,15 +12,16 @@ function MainPage() {
   const location = useLocation();
 
   useEffect(() => {
-
-    if(window.localStorage.getItem('LastPage') !== location.pathname)
-    {
-      window.localStorage.setItem('LastPage', location.pathname);
-    }
     if(store.CurrentUserID === 0 || !GetPremmisionByPremName("View_Movies")) // if no current loged in user
     {
-      //window.localStorage.setItem("LastPage", "/");
-      history.push('/'); // go to log in page
+      // window.localStorage.setItem("LastPage", "/");
+      history.push('/'); 
+    }
+    else{
+      if(window.localStorage.getItem('LastPage') !== location.pathname)
+      {
+        window.localStorage.setItem('LastPage', location.pathname);
+      }
     }
   }, []);
 

@@ -13,13 +13,18 @@ function SubscriptionsPage() {
   const location = useLocation();
 
   useEffect(() => {
-    if(store.CurrentUserID === 0) // if no current loged in user
+    if(store.CurrentUserID === 0 || !GetPremmisionByPremName("View_Subscriptions")) // if no current loged in user
     {
+      // window.localStorage.setItem('LastPage', "/");
+      console.log("pushed to loginpage ");
       history.push('/'); // go to log in page
     }
-    if(window.localStorage.getItem('LastPage') !== location.pathname)
+    else
     {
-      window.localStorage.setItem('LastPage', location.pathname);
+      if(window.localStorage.getItem('LastPage') !== location.pathname)
+      {
+        window.localStorage.setItem('LastPage', location.pathname);
+      }
     }
   }, []);
 

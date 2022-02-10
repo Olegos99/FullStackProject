@@ -29,11 +29,7 @@ function EditUserPage(props) {
 
     useEffect(() => {
      console.log("User id to edit = " + userIdToEdit); // <-- pass the component props
-     if (store.CurrentUserID === 0 || store.CurrentUserID !== "61f63e8de4c909954be639fb")
-     {
-       // if no current loged in user or someone who is not admin tryes to go there
-       history.push("/"); // go to log in page
-     }
+
      if(window.localStorage.getItem('LastPage') !== location.pathname)
      {
        window.localStorage.setItem('LastPage', location.pathname);
@@ -232,7 +228,7 @@ function EditUserPage(props) {
       First Name: <input ref={UserFirstName} type="text" name="FirstName" onChange={HandleInputChange}/> <br/>
       Last Name: <input ref={UserLastName} type="text" name="LastName"onChange={HandleInputChange}/> <br/>
       User Name: <input ref={UserName} type="text" name="UserName"onChange={HandleInputChange}/> <br/>
-      Session TimeOut (Minutes): <input ref={UserTimout} type="number" name="SessionTimeOut" min = "0"onChange={HandleInputChange}/> <br/>
+      Session TimeOut (Minutes): <input ref={UserTimout} type="number" name="SessionTimeOut" min = "0" step="any" onChange={HandleInputChange}/> <br/>
       Premissions: <br/>
       <ul>
         <li><input ref={ViewSubs} type="checkbox" name="View_Subscriptions" onChange={HandleInputChange}></input> View Subscriptions </li>

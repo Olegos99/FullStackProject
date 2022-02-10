@@ -4,10 +4,19 @@ import {addObj} from '../../Utils/Utils';
 
 function AddMoviePage() {
   const history = useHistory();
+  const location = useLocation();
 
   const FilmsUrl = "http://localhost:8500/api/movies";
 
   const Genres = useRef(null);
+
+  useEffect(()=>
+  {
+    if(window.localStorage.getItem('LastPage') !== location.pathname)
+    {
+      window.localStorage.setItem('LastPage', location.pathname);
+    }
+  },[]);
 
   const [Movie, SetMovie] = useState({
     Name: "",
@@ -63,6 +72,7 @@ function AddMoviePage() {
         {
             var RecivedString = Genres.current.value;
             var WordsArray = RecivedString.split(' ');
+            WordsArray = WordsArray.filter(word => word != "");
             WordsArray.forEach(element => {
                 element = element.replace(',','');
             });

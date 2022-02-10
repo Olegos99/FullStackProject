@@ -1,6 +1,6 @@
 import React, {useState, useRef} from 'react';
 
-const SubscriptionPartOfMember = (item,OpenSubscriptionCreation, ShowCreateNewSubscription ,films, AllSubscriptionsToRender, SubscriptionFunction) =>
+const SubscriptionPartOfMember = (item,OpenSubscriptionCreation, ShowCreateNewSubscription ,films, AllSubscriptionsToRender, SubscriptionFunction, CanUpdateSubscriptions) =>
   {
     // const Date = useRef(null); // cant use them why?
     // const MovieID = useRef(null);
@@ -64,7 +64,7 @@ const SubscriptionPartOfMember = (item,OpenSubscriptionCreation, ShowCreateNewSu
             </tr>
             <tr>
                 <td>
-                    <button id={`${item._id}`} name ={item.Name} onClick={OpenSubscriptionCreation}>Subscribe to new movie</button>
+                    <button id={`${item._id}`} name ={item.Name} style={{display: CanUpdateSubscriptions? "block":"none"}} onClick={OpenSubscriptionCreation}>Subscribe to new movie</button>
                 </td>
             </tr>
             <tr>
@@ -87,7 +87,10 @@ const SubscriptionPartOfMember = (item,OpenSubscriptionCreation, ShowCreateNewSu
                                         {
                                             // console.log(SubscriptionsToShow.props.children.length);
                                             SubscriptionsToShow.props.children.forEach(element => {
-                                                FilmsIdsNOTtoShow.push(element.props.children[0].props.id); 
+                                                if(element.props.children.length > 0)
+                                                {
+                                                    FilmsIdsNOTtoShow.push(element.props.id); 
+                                                }
                                             });
                                             // console.log(FilmsIdsNOTtoShow);
                                         }

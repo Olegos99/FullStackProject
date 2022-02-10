@@ -47,7 +47,34 @@ const PostNewSubscription = (RecivedItem) =>
 }
 
 //Put Item by ID (Update existing)
-const UpdateSubscriptionById = (id, item) =>
+const UpdateSubscriptionsByDeletingFilmById = (id) =>
+{
+    console.log("Delete movie from all subscriptions request resived")
+    console.log("Movie id = " + id)
+    return new Promise((resolve,reject) =>
+    {
+        SubscriptionModel.updateMany( // select your doc in moongo
+            { }, // your query, usually match by _id
+            { $pull: { Movies: {  movieId: id   } } }, // item(s) to match from array you want to pull/remove
+            (error) => 
+            {
+                if(error)
+                {
+                    reject(error)
+                    console.log("Delete movie from all subscriptions - Error")
+                }
+                else
+                {
+                    console.log("Delete movie from all subscriptions - OK")
+                    resolve(`Subscriptions were succsesfuly updated`);
+                }
+            }
+        )
+    });
+}
+
+
+const UpdateSubscriptionsById = (id, item) =>
 {
     return new Promise((resolve,reject) =>
     {
@@ -61,7 +88,7 @@ const UpdateSubscriptionById = (id, item) =>
     });
 }
 
-//Delete Item by ID
+//Delete Item by ID (by member ID)
 const DeleteSubscriptionByID = async (id) => {
     console.log("resived deletion request with id: " + id);
     return new Promise((resolve, reject) => {
@@ -74,7 +101,6 @@ const DeleteSubscriptionByID = async (id) => {
             {
                 resolve(`Item with id:${id} was delited`);
             }
-
         })
     })
 }
@@ -83,7 +109,8 @@ const DeleteSubscriptionByID = async (id) => {
 module.exports ={
 PostNewSubscription,
 GetAllSubscriptions,
-UpdateSubscriptionById,
+UpdateSubscriptionsByDeletingFilmById,
 DeleteSubscriptionByID,
-GetSubscriptionById
+GetSubscriptionById,
+UpdateSubscriptionsById
 }
