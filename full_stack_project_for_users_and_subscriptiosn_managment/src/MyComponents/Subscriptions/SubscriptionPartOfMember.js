@@ -63,8 +63,8 @@ const SubscriptionPartOfMember = (item,OpenSubscriptionCreation, ShowCreateNewSu
                 </th>
             </tr>
             <tr>
-                <td>
-                    <button id={`${item._id}`} name ={item.Name} style={{display: CanUpdateSubscriptions? "block":"none"}} onClick={OpenSubscriptionCreation}>Subscribe to new movie</button>
+                <td style ={{justifyContent:"center"}}>
+                    <button id={`${item._id}`} name ={item.Name} style={{display: CanUpdateSubscriptions? "block":"none", margin:"auto"}} onClick={OpenSubscriptionCreation}>Subscribe to new movie</button>
                 </td>
             </tr>
             <tr>

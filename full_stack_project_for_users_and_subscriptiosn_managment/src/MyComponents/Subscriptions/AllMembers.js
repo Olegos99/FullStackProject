@@ -114,7 +114,7 @@ function AllMembers() {
     useEffect(() => {
       // console.log("usefect2");
           let Prep = Members.map((item,key) => (
-              <table name={item.Name} id={item._id} key={key} style={{ border: "thick solid black"}}>
+              <table name={item.Name} id={item._id} key={key} style={{ border: "thick solid black", margin:"auto", width:"80%" }}>
               <tbody>
                 <tr>
                   <th>
@@ -133,7 +133,7 @@ function AllMembers() {
                 </tr>
                 <tr>
                   <td>
-                      <nav style={{ display: 'flex'}}>
+                      <nav style={{ display: 'flex', margin:"auto", justifyContent:"center"}}>
                           <button id={`${item._id}`} onClick={EditMemberWithId} style={{display: GetPremmisionByPremName("Update_Subscriptions") ? 'block':'none'}}>
                           Edit
                           </button>
@@ -145,7 +145,7 @@ function AllMembers() {
                 </tr>
                 <tr>
                   <td>
-                      <nav style={{ display: 'flex'}}>
+                      <nav style={{ display: 'flex', margin:"auto", justifyContent:"center"}}>
                         {SubscriptionPartOfMember(item,OpenSubscriptionCreation,
                            ShowCreateNewSubscription.includes(item._id),[...films],
                             [...AllSubscriptionsToRender], SubscribeToMovie, GetPremmisionByPremName("Update_Subscriptions"))}

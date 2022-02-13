@@ -28,15 +28,15 @@ function AllUsersPage() {
   useEffect(() => {
     console.log("useEffect2");
     let AllUsers2 = Users.map((item, key) => (
-      <table id={item.key} key={key} style={{ border: "thick double #32a1ce" }}>
+      <table id={item.key} key={key} style={{ border: "thick double #32a1ce", margin:"auto", width:"80%" }}>
         <tbody>
           <tr>
-            <td>Name: </td>
-            <td>{item.Name}</td>
+            <td style={{ margin:"auto", width:"50%" }}>Name: </td>
+            <td style={{ margin:"auto", width:"50%" }}>{item.Name}</td>
           </tr>
           <tr>
-            <td>Username: </td>
-            <td>{item.Username}</td>
+            <td style={{ margin:"auto", width:"50%" }}>Username: </td>
+            <td style={{ margin:"auto", width:"50%" }}>{item.Username}</td>
           </tr>
           <tr>
             <td>Session TimeOut: </td>
@@ -47,19 +47,18 @@ function AllUsersPage() {
             <td>{item.CreatedDate}</td>
           </tr>
           <tr>
-            <td>Premissions: </td>
-            <td>{item.Premissions}</td>
+            <td  style={{ margin:"auto", width:"50%" }}>Premissions: </td>
+            <td  style={{ margin:"auto", width:"50%" }}>{item.Premissions}</td>
           </tr>
-          <tr>
-            <td>
-              <button id={`${item.id}`} onClick={EditUserWithId}>
+          <tr style={{ display:"flex", margin:"auto", justifyContent:"center"}}>
+            <button id={`${item.id}`} onClick={EditUserWithId}>
                 Edit
               </button>
               <button id={`${item.id}`} onClick={DeleteUser}>
                 Delete
               </button>
-            </td>
           </tr>
+
         </tbody>
       </table>
     ));

@@ -107,7 +107,7 @@ function LogInComponent() {
   return <div>
       <h2>Welcomme!</h2>
       <h3>Please login:</h3><br/>
-      <table>
+      <table style = {{margin:"auto"}}>
           <tbody>
               <tr><td>Username:</td><td><input name="username" ref={UsernameinputEl} type="text" onChange={ApplyChanges}></input></td></tr>
               <tr><td>Password:</td><td><input name="password" ref={PasswordinputEl} type="password" onChange={ApplyChanges}></input></td></tr>

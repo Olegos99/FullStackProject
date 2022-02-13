@@ -56,7 +56,7 @@ function SubscriptionsPage() {
 
   return <div>
       <h2>Subscriptions:</h2>
-      <nav style={{display: 'flex', justifyContent: 'left'}}>
+      <nav style={{display: 'flex', justifyContent:"center", margin:"auto", width:"80%" }}>
         <button onClick={ShowAllMembers}>All Members</button>
         <button onClick={ToAddMember} style={{display: GetPremmisionByPremName("Create_Subscriptions") ? 'block':'none'}}>Add Member</button>
       </nav>

@@ -53,7 +53,7 @@ function MainPage() {
 
   return <div>
       <h2>Movies:</h2>
-      <nav style={{display: 'flex', justifyContent: 'left'}}>
+      <nav style={{display: 'flex', justifyContent:"center", margin:"auto", width:"80%" }}>
         <button onClick={ShowAllMovies} style={{display:'block'}} >All Films</button>
         <button onClick={AddFilm} style={{display: GetPremmisionByPremName("Create_Movies") ? 'block':'none'}}>Add Movie</button>
       </nav>

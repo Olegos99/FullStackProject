@@ -143,7 +143,7 @@ function AllMoviespage() {
         if(isMountedRef.current)
         {
             let Prep = Movies.map((item,key) => (
-                <table name={item.Name} id={item._id} key={key} style={{ border: "thick solid black"}}>
+                <table name={item.Name} id={item._id} key={key} style={{ border: "thick solid black", margin:"auto", width:"80%" }}>
                 <tbody>
                   <tr>
                     <th>
@@ -158,8 +158,8 @@ function AllMoviespage() {
                   <tr>
                     <td>
                         <nav style={{ display: 'flex'}}>
-                            <img src={`${item.img}`} style={{width:"50%",height:"50%"}}/>
-                            <table style={{ border: "1px solid black"}}>
+                            <img src={`${item.img}`} style={{ margin:"auto"}}/>
+                            <table style={{ border: "1px solid black", margin:"auto"}}>
                             <tbody>
                                 <tr>
                                     <th>
@@ -207,7 +207,7 @@ function AllMoviespage() {
       
                   <tr>
                     <td>
-                        <nav style={{ display: 'flex'}}>
+                        <nav style={{ display: 'flex' , margin:"auto", justifyContent:"center"}}>
                             <button id={`${item._id}`} onClick={EditMovieWithId} style={{display: GetPremmisionByPremName("Update_Movies") ? 'block':'none'}}>
                             Edit
                             </button>

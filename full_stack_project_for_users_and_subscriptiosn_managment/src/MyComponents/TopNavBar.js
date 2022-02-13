@@ -109,7 +109,7 @@ function TopNavBar() {
           <div style={{display: store.CurrentUserID !== 0 ? "block" : "none"}}><button onClick={DoLogOut}>LogOut</button></div>
       </nav>
       <h1>Movies - Subscriptions Web Site</h1>
-      <nav style={{ display: 'flex', justifyContent: 'left'}}>
+      <nav style={{ display: 'flex', justifyContent: 'center'}}>
         <button name="movies" onClick={ShowMovies} style={{display: store.CurrentUserID !== 0 && GetPremmisionByPremName('View_Movies')
         ? "block" : "none"}}>Movies</button>
         <button name="subscriptions" onClick={ShowSubscriptions} style={{display: store.CurrentUserID !== 0 && GetPremmisionByPremName('View_Subscriptions')
